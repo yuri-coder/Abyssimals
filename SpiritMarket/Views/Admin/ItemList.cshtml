@@ -1,0 +1,40 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Create Item";
+    ViewData["User"] = @ViewBag.User;
+}
+
+<div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 100%;">
+    <div class="card-header border-success text-center">
+        <h4><b>Select an item to edit!</b></h4>
+    </div>
+    <div class="card-body text-success">
+        <h4 class="card-title">Please select an item to edit.</h4>
+        <p class="card-text text-danger">@ViewBag.AdminMessage
+        </p>
+       <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col"><h5>Item ID</h5></th>
+                <th scope="col"><h5>Name</h5></th>
+                <th scope="col"><h5>Item Icon</h5></th>
+                <th scope="col"><h5>Actions</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach(Product prod in ViewBag.AllProducts){
+                        <tr>
+                            <th scope="row" style="vertical-align: middle;"><h5>@prod.ProductId</h5></th>
+                            <td style="vertical-align: middle;"><h5>@prod.Name</h5></td>
+                            <td style="vertical-align: middle;"><img src="~/images/@prod.Image" class="inventory"></td>
+                            <td style="vertical-align: middle;">
+                                <a asp-controller="Admin" asp-action="EditItem" asp-route-pid=@prod.ProductId><button class="btn btn-success"><b>Edit</b></button></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

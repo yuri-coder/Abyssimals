@@ -1,0 +1,37 @@
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Home";
+    ViewData["Username"] = @ViewBag.User.Username;
+}
+
+@{
+    if(ViewBag.User.Shop == null){
+        <div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 75%;">
+            <div class="card-header border-success text-center">
+                <b>Create a shop!</b>
+            </div>
+            <div class="card-body text-success">
+                <h5 class="card-title">Don't have a shop yet?</h5>
+                 <p class="card-text">Spirit Shops are easy to set up! For a small fee of 75 Spirit Gems, you too can have your own shop!
+                     Simply tell us what you want the name of your shop to be!
+                 </p>
+                @model Shop
+                <form asp-action = "CreateShop" asp-controller="Shops" method="post">
+                    <div class = "form-group row">
+                        <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
+                        <div class="col-sm-8">
+                            <input asp-for="Name" class="form-control" placeholder="Shop Name (32 characters max)">
+                            <small class="form-text text-danger"><span asp-validation-for="Name"></span>@ViewBag.NoMoney</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-success float-right">Create Shop!</button>
+                </form>
+            </div>
+        </div>
+    }
+    else{
+        <h1>You already have a shop</h1>
+        <p>@ViewBag.MyShop.Name</p>
+    }
+}

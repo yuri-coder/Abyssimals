@@ -1,0 +1,7 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Admin Home";
+    ViewData["User"] = @ViewBag.User;
+}
+<h1>What would you like to do, @ViewBag.User.Username?</h1>
+<h3>@ViewBag.AdminMessage</h3>

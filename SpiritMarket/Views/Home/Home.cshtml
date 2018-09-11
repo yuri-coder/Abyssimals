@@ -1,0 +1,10 @@
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Home";
+    ViewData["Username"] = @ViewBag.User.Username;
+    ViewData["User"] = @ViewBag.User;
+}
+
+<h1>Welcome home, @ViewBag.User.Username! (User# @ViewBag.User.UserId )</h1>
+<h1>Hello @ViewBag.User.Username</h1>
+<a href="user/logout">Logout?</a>
