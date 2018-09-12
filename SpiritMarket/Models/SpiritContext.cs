@@ -42,5 +42,12 @@ namespace SpiritMarket.Models
         public Product GetOneProduct(string ProductName){
             return this.Products.SingleOrDefault(product => product.Name == ProductName);
         }
+
+        public List<Inventory> GetUserInventory(int? UserId){
+            if(UserId == null){
+                return null;
+            }
+            return this.Inventories.Where(inventory => inventory.UserId == UserId).ToList();
+        }
     }
 }

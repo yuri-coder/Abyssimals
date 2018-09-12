@@ -75,6 +75,10 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
+            ViewBag.Shop = context.GetOneShop(shop_id);
+            if(ViewBag.Shop == null || ViewBag.Shop.UserId == ViewBag.User.UserId){
+                return RedirectToAction("MyShop");
+            }
             return View();
         } 
 

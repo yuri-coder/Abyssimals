@@ -1,0 +1,17 @@
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Home";
+    ViewData["Username"] = @ViewBag.User.Username;
+}
+<h1>Gee whiz i sure hope this works</h1>
+@{
+    if(@ViewBag.Inventory != null){
+        foreach(Inventory item in @ViewBag.Inventory){
+            <h3>@item.Product.Name</h3>
+        }
+    }
+    else{
+        <p>Inventory null!</p>
+    }
+    
+}
