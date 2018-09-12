@@ -73,7 +73,8 @@ namespace SpiritMarket.Controllers
                 var file = System.IO.Path.Combine(webRoot + "\\images", p.Image);
                 Console.WriteLine("File path: " + file);
                 if(System.IO.File.Exists(file)){
-                    Console.WriteLine("File exists!");
+                    //Console.WriteLine("File exists!");
+                    p.IsTradeable = p.IsTradeable ?? false;
                     //p.Image = file;
                     context.Add(p);
                     context.SaveChanges();
@@ -141,10 +142,13 @@ namespace SpiritMarket.Controllers
                 Console.WriteLine("File path: " + file);
                 if(System.IO.File.Exists(file)){
                     Console.WriteLine("File exists!");
+                    p.IsTradeable = p.IsTradeable ?? false;
+                    Console.WriteLine("P Tradeable is " + p.IsTradeable);
                     //p.Image = file;
                     original.Name = p.Name;
                     original.Description = p.Description;
                     original.Image = p.Image;
+                    original.IsTradeable = p.IsTradeable;
                     context.SaveChanges();
                     TempData["AdminMessage"] = $"Item #{pid} successfully edited!";
                     return RedirectToAction("ItemList");
@@ -155,6 +159,7 @@ namespace SpiritMarket.Controllers
                     return View("EditItem");
                 }
             }
+            Console.WriteLine("IsTradeable is " + p.IsTradeable);
             return View("EditItem");
         }
 

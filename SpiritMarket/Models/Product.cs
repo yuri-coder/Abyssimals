@@ -20,6 +20,9 @@ namespace SpiritMarket.Models{
         [Required(ErrorMessage = "What does it look like?")]
         public string Image {get; set;}
 
+        [Display(Name="Tradeable")]
+        public bool? IsTradeable {get; set;}
+
         public List<ListedProduct> Shops {get; set;}
         public List<Inventory> Users {get; set;}
 

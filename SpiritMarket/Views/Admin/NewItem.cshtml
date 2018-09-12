@@ -30,6 +30,11 @@
                     <input asp-for="Image" class="form-control" placeholder="Name of image file (including extension)">
                     <small class="form-text text-danger"><span asp-validation-for="Image"></span>@ViewBag.ImageError</small>
                 </div>
+                <label asp-for="IsTradeable" class="col-sm-4 col-form-label text-center text-muted"></label>
+                <div class="col-sm-8 text-center align-bottom">
+                    <input class="form-check-input m-auto" style="width: 25px; height: 25px;" type="checkbox" data-val="true" id="IsTradeable" name="IsTradeable" value="true" checked>
+                    <small class="form-text text-danger"><span asp-validation-for="IsTradeable"></span></small>
+                </div>
             </div>
             <hr>
             <button type="submit" class="btn btn-success float-right">Create Item!</button>
