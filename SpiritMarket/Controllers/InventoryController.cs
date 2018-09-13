@@ -27,7 +27,8 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Inventory = context.Users.Include(user => user.Items).ThenInclude(i => i.Product).SingleOrDefault(user => user.UserId == HttpContext.Session.GetInt32("UserId")).Items;
+            ViewBag.Inventory = context.Users.Include(user => user.Items).ThenInclude(i => i.Product).
+                                SingleOrDefault(user => user.UserId == HttpContext.Session.GetInt32("UserId")).Items;
             return View();
         }
 
@@ -38,7 +39,6 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-
             User current = ViewBag.User;
             Inventory TestLeaf = new Inventory();
             TestLeaf.Amount = 3;
@@ -49,10 +49,14 @@ namespace SpiritMarket.Controllers
             TestEssence.Amount = 2;
             TestEssence.ProductId = 7;
             TestEssence.UserId = current.UserId;
-            context.Add(TestLeaf);
-            context.Add(TestEssence);
-            context.SaveChanges();
 
+            Inventory TestPetal = new Inventory();
+            TestPetal.Amount = 5;
+            TestPetal.ProductId = 2;
+            TestPetal.UserId = current.UserId;
+            context.AddToInventory(TestLeaf);
+            context.AddToInventory(TestEssence);
+            context.AddToInventory(TestPetal);
             return RedirectToAction("DisplayInventory");
         }
     }

@@ -4,14 +4,46 @@
     ViewData["Username"] = @ViewBag.User.Username;
 }
 <h1>Gee whiz i sure hope this works</h1>
-@{
+
+@{   
     if(@ViewBag.Inventory != null){
+        int count = 0;
         foreach(Inventory item in @ViewBag.Inventory){
-            <h3>@item.Product.Name</h3>
+            <text>
+                <div id="addform/@item.InventoryId" class="d-none">
+                    <a onclick="testfunction();" class="btn btn-success" role="button">Add to Shop</a>
+                </div>
+                <a tabindex="@item.InventoryId" data-container="body" 
+                data-toggle="popover" title="@item.Product.Name x @item.Amount"
+                data-itemname="@item.Product.Name" data-itemamount="@item.Amount" data-sellable="@item.Product.IsTradeable"
+                data-inventoryid="@item.InventoryId">
+                    <img class="inventory m-0" src="~/images/@item.Product.Image" style="border: 0;">
+                </a>
+            </text>
         }
     }
-    else{
-        <p>Inventory null!</p>
-    }
-    
+}
+
+
+@section Scripts{
+    <script>
+    $(function(){
+        $('[data-toggle="popover"]').popover({
+            html: true,
+            trigger: 'focus',
+            placement: 'right',
+            content: function(){
+                var inventid = $(this).data("inventoryid");
+                var tradehtml = $(this).data("sellable") == "True" ? 
+                                '<a href="/inventory/get/starterkit" class="btn btn-success" role="button">Add to Shop</a>' : "";
+                var discardhtml = '<a href="/inventory/get/starterkit" class="btn btn-danger" role="button">Discard</a>'
+                return '<div class="btn-group-vertical">' +
+                        tradehtml + discardhtml + "</div>";
+            }
+        });
+        function testfunction(){
+            alert("hello");
+        }
+    });
+    </script>
 }

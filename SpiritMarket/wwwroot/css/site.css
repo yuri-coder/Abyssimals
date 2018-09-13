@@ -39,3 +39,24 @@ img.inventory{
     image-rendering: pixelated;
     height: auto !important;
 }
+
+.inventory-item{
+    display: inline;
+}
+
+.inventory-container{
+    display: inline;
+}
+
+.btn:focus, a:focus, .btn:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  a{
+    text-decoration: none !important;
+  }
+
+  .popover{
+    text-align: center !important;
+}

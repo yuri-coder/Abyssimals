@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
  
 namespace SpiritMarket.Models
 {
@@ -48,6 +49,70 @@ namespace SpiritMarket.Models
                 return null;
             }
             return this.Inventories.Where(inventory => inventory.UserId == UserId).ToList();
+        }
+
+        public void AddToInventory(Inventory Item){
+            int UserId = Item.UserId;
+            List<Inventory> UserInventory = this.Users.Include(user => user.Items).
+                        SingleOrDefault(user => user.UserId == UserId).Items;
+            bool ItemExists = false;
+            Inventory ExistingItem = null;
+            foreach(Inventory HeldItem in UserInventory){
+                if(Item.ProductId == HeldItem.ProductId){
+                    ItemExists = true;
+                    ExistingItem = HeldItem;
+                    break;
+                }
+            }
+            if(ItemExists){
+                ExistingItem.Amount += Item.Amount;
+            }
+            else{
+                this.Add(Item);
+            }
+            this.SaveChanges();
+        }
+
+        public bool AddToShop(Inventory Item, int ShopId, int Stock, decimal Price){
+            if(Item.Amount < Stock){
+                return false;
+            }
+            ListedProduct NewProduct = new ListedProduct();
+            List<ListedProduct> ShopStock = this.Shops.Include(shop => shop.Products).SingleOrDefault(Shop=> Shop.ShopId == ShopId).Products;
+            bool AlreadyOnSale = false;
+            ListedProduct OnSaleProduct = null;
+            foreach(ListedProduct OnSale in ShopStock){
+                if(OnSale.ProductId == Item.ProductId){
+                    AlreadyOnSale = true;
+                    OnSaleProduct = OnSale;
+                    break;
+                }
+            }
+            if(AlreadyOnSale){
+                OnSaleProduct.Stock += Stock;
+                OnSaleProduct.Price = Price;
+            }
+            else{
+                NewProduct.ProductId = Item.ProductId;
+                NewProduct.Price = Price;
+                NewProduct.ShopId = ShopId;
+                NewProduct.Stock = Stock;
+            }
+            RemoveItemFromInventory(Item, Stock);
+            this.SaveChanges();
+
+            return true;
+        }
+
+        public bool RemoveItemFromInventory(Inventory Item, int Amount){
+            if(Item.Amount < Amount)
+                return false;
+            Item.Amount -= Amount;
+            if(Item.Amount == 0){
+                this.Remove(Item);
+                this.SaveChanges();
+            }
+            return true;
         }
     }
 }
