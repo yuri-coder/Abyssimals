@@ -4,7 +4,16 @@ namespace SpiritMarket.Models{
     public class ListedProduct{
         [Key]
         public int ListedProductId {get; set;}
-        public decimal Price {get; set;}
+
+        private decimal price;
+        public decimal Price {
+            get{
+                return price;
+            } 
+            set{
+                price = value > 0 ? value : 0;
+            }
+        }
         public int Stock {get; set;}
 
         public int ShopId {get; set;}

@@ -59,4 +59,6 @@ img.inventory{
 
   .popover{
     text-align: center !important;
+    max-width: none !important;
+    /* display: inline-block !important; */
 }

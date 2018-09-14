@@ -73,12 +73,15 @@ namespace SpiritMarket.Models
             this.SaveChanges();
         }
 
-        public bool AddToShop(Inventory Item, int ShopId, int Stock, decimal Price){
+        public bool AddToShop(Inventory Item, Shop UserShop, int Stock, decimal Price){
             if(Item.Amount < Stock){
                 return false;
             }
             ListedProduct NewProduct = new ListedProduct();
-            List<ListedProduct> ShopStock = this.Shops.Include(shop => shop.Products).SingleOrDefault(Shop=> Shop.ShopId == ShopId).Products;
+            if(UserShop == null){
+                return false;
+            }
+            List<ListedProduct> ShopStock = UserShop.Products;
             bool AlreadyOnSale = false;
             ListedProduct OnSaleProduct = null;
             foreach(ListedProduct OnSale in ShopStock){
@@ -95,8 +98,9 @@ namespace SpiritMarket.Models
             else{
                 NewProduct.ProductId = Item.ProductId;
                 NewProduct.Price = Price;
-                NewProduct.ShopId = ShopId;
+                NewProduct.ShopId = UserShop.ShopId;
                 NewProduct.Stock = Stock;
+                this.Add(NewProduct);
             }
             RemoveItemFromInventory(Item, Stock);
             this.SaveChanges();
