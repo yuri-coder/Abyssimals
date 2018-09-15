@@ -6,6 +6,7 @@
 
 @{
     if(ViewBag.User.Shop == null){
+        <text>
         <div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 75%;">
             <div class="card-header border-success text-center">
                 <b>Create a shop!</b>
@@ -29,9 +30,29 @@
                 </form>
             </div>
         </div>
+        </text>
     }
     else{
-        <h1>You already have a shop</h1>
-        <p>@ViewBag.MyShop.Name</p>
+        <h1>@ViewBag.MyShop.Name</h1>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col"><h5>Item</h5></th>
+                <th scope="col"><h5>Amount</h5></th>
+                <th scope="col"><h5>Price Per Item</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(ListedProduct prod in ViewBag.MyShop.Products){
+                    <text>
+                    <tr>
+                        <th scope="row" style="vertical-align: middle;"><img src="~/images/@prod.Product.Image" class="inventory"><h5>@prod.Product.Name</h5></th>
+                        <td style="vertical-align: middle;"><h5>@prod.Stock</h5></td>
+                        <td style="vertical-align: middle;"><h5>@prod.Price</h5></td>
+                    </tr>
+                    </text>
+                }
+            </tbody>
+        </table>
     }
 }

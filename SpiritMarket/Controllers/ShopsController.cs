@@ -38,7 +38,8 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
             //if i have a shop, go to edit shop, otherwise go to create a shop
-            ViewBag.MyShop = context.GetOneShop(HttpContext.Session.GetInt32("UserId"));
+            ViewBag.MyShop = context.Shops.Include(shop => shop.Products).ThenInclude(listed => listed.Product).
+            SingleOrDefault(shop => shop.UserId == HttpContext.Session.GetInt32("UserId"));
             ViewBag.NoMoney = TempData["NoMoney"];
             return View();
         }
