@@ -1,7 +1,8 @@
 @{
     Layout = "_HomeLayout";
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Inventory";
     ViewData["Username"] = @ViewBag.User.Username;
+    ViewData["User"] = @ViewBag.User;
 }
 <h1>Let's see what you're carrying...</h1>
 <p class="text-danger">@ViewBag.Error</p>
@@ -24,6 +25,11 @@
                 </a>
             </text>
         }
+    }
+}
+@{
+    if(@ViewBag.Inventory.Count == 0){
+        <h5>Hmm... It looks as though you don't have any items!</h5>
     }
 }
 

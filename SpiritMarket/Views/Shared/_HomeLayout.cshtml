@@ -48,6 +48,22 @@
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Shops" asp-action="AllShops"><h5>All Shops</h5></a>
             </li>
+            @{
+                if(((User) @ViewData["User"]).IsAdmin){
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <h5 class="d-inline">Admin Actions</h5>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="NewAdmin">Give Admin Status</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="NewItem">Create Item</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="ItemList">Edit Item</a>
+                        </div>
+                    </li>
+                }
+            }
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">

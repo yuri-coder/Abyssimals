@@ -22,12 +22,13 @@ namespace SpiritMarket.Controllers
 
         [HttpGet]
         [Route("")]
+        [Route("all")]
         public IActionResult AllShops(){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            return View();
+            return View("AllShops");
         }
 
         [HttpGet]
