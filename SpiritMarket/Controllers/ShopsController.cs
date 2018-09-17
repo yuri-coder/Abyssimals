@@ -28,6 +28,8 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
+            ViewBag.AllShops = context.Shops.Include(shop => shop.User).
+                                Where(shop => shop.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
             return View("AllShops");
         }
 
@@ -73,19 +75,41 @@ namespace SpiritMarket.Controllers
         }
 
         [HttpGet]
-        [Route("{shop_id}")]
-        public IActionResult OtherShop(int shop_id){
+        [Route("{username}")]
+        public IActionResult OtherShop(string username){
             //if my id, redirect to shops/me
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Shop = context.GetOneShop(shop_id);
+            ViewBag.OtherUser = context.GetOneUser(username);
+            int OtherUserId = ViewBag.OtherUser.UserId;
+            if(ViewBag.OtherUser == null){
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Shop = context.Shops.Include(shop => shop.Products).ThenInclude(listed => listed.Product).
+            SingleOrDefault(shop => shop.UserId == OtherUserId);
             if(ViewBag.Shop == null || ViewBag.Shop.UserId == ViewBag.User.UserId){
                 return RedirectToAction("MyShop");
             }
             return View();
         } 
+
+        [HttpPost]
+        [Route("{user}/{itemid}/{amount}")]
+        public IActionResult PurchaseItem(string user, int itemid, int amount){
+            ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ListedProduct Item = context.GetOneListedProduct(itemid);
+            if(Item == null){
+                return RedirectToAction("OtherShop", new{ username = user});
+            }
+            
+            return RedirectToAction("OtherShop", new{ username = user});
+        }
 
         [HttpPost]
         [Route("update")]

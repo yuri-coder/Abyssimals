@@ -1,0 +1,79 @@
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Home";
+    ViewData["Username"] = @ViewBag.User.Username;
+    ViewData["User"] = @ViewBag.User;
+}
+
+<h1>@ViewBag.Shop.Name</h1>
+<h5>Owned by @ViewBag.OtherUser.Username</h5>
+@{
+    foreach(ListedProduct item in @ViewBag.Shop.Products)
+    {
+        var addid = "addform" + @item.ListedProductId;
+        var popupid = "popup" + @item.ListedProductId;
+        <text>
+            <div id="@addid" class="d-none">
+                <button onclick="testfunction()" class="btn btn-success addshop">Add to Shop</button>
+            </div>
+            <a tabindex="@item.InventoryId" data-container="body" id = "@popupid" 
+            data-toggle="popover" title="@item.Product.Name x @item.Amount"
+            data-itemname="@item.Product.Name" data-itemamount="@item.Amount" data-sellable="@item.Product.IsTradeable"
+            data-inventoryid="@item.InventoryId">
+                <img class="inventory m-0" src="~/images/@item.Product.Image" style="border: 0;">
+            </a>
+        </text>
+    }
+}
+
+@section Scripts{
+    <script>
+    $(function(){
+        $('[data-toggle="popover"]').popover({
+            html: true,
+            trigger: 'click',
+            placement: 'right',
+            content: function(){
+                var successid = "addform" + $(this).data("inventoryid");
+                var tradehtml = $(this).data("sellable") == "True" ? 
+                                $("#" + successid).html() : "";
+                var discardhtml = '<a href="/inventory/get/starterkit" class="btn btn-danger" role="button">Discard</a>'
+                return '<div class="btn-group-vertical" data-popupid="' + $(this).data("inventoryid") + '">' +
+                        tradehtml + discardhtml + "</div>";
+            }
+        });
+        function testfunction(){
+            alert("hello!");
+        }
+        $("body").on("click", ".inventory", function(){
+            $(".addshop").on("click", function(){ 
+                var inventoryid = $(this).parent().attr("data-popupid");
+                var popupid = "popup" + inventoryid;
+                var dataelement = $("#" + popupid);
+                var sampledata = dataelement.attr("data-sellable");
+                var heldamount = dataelement.attr("data-itemamount");
+
+                $(this).closest(".popover-body").html(
+                    '<form action="inventory/add" method="post">' + 
+                    '<input type="hidden" name="InventoryId" value="' + inventoryid + '">' + 
+                    '<div class = "form-group row">' +
+                        '<label for="amount" class="col-sm-6 col-form-label"><h5>Amount</h5></label>' +
+                        '<div class="col-sm-6">' + 
+                            '<input class="form-control" id="amount" type="number" step="1" name="Amount" min="1" max="' + heldamount + '" required value="1">' + 
+                        '</div>' + 
+                    '</div>' + 
+                    '<div class="form-group row">' + 
+                        '<label for="price" class="col-sm-6 col-form-label"><h5>Price</h5></label>' +
+                        '<div class="col-sm-6">' + 
+                            '<input class="form-control" id="price" type="number" step="0.01" name="Price" min="0" max="999999.99" required value="0">' + 
+                        '</div>' + 
+                    '</div>' +
+                    '<button type="submit" class="btn btn-success">Add to Shop</button></form>'
+                );
+                $(this).closest(".popover").css({"max-width":"none !important", "width":"auto"})
+                //alert("clicked a button!");
+            });
+        });
+    });
+    </script>
+}

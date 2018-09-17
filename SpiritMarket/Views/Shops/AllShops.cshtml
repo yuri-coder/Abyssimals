@@ -6,3 +6,21 @@
 }
 
 <h1>All Shops</h1> 
+<table class="table table-hover">
+    <thead>
+        <tr>
+        <th scope="col"><h5>Shop Owner</h5></th>
+        <th scope="col"><h5>Shop Name</h5></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach(Shop shop in ViewBag.AllShops){
+                <tr>
+                    <th scope="row" style="vertical-align: middle;"><h5>@shop.User.Username</h5></th>
+                    <td style="vertical-align: middle;"><a asp-action="OtherShop" asp-route-username=@shop.User.Username><h5>@shop.Name</h5></a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
