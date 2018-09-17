@@ -4,55 +4,42 @@
     ViewData["Username"] = @ViewBag.User.Username;
 }
 
-@{
-    if(ViewBag.User.Shop == null){
-        <text>
-        <div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 75%;">
-            <div class="card-header border-success text-center">
-                <b>Create a shop!</b>
-            </div>
-            <div class="card-body text-success">
-                <h5 class="card-title">Don't have a shop yet?</h5>
-                 <p class="card-text">Spirit Shops are easy to set up! For a small fee of 75 Spirit Gems, you too can have your own shop!
-                     Simply tell us what you want the name of your shop to be!
-                 </p>
-                @model Shop
-                <form asp-action = "CreateShop" asp-controller="Shops" method="post">
-                    <div class = "form-group row">
-                        <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
-                        <div class="col-sm-8">
-                            <input asp-for="Name" class="form-control" placeholder="Shop Name (32 characters max)">
-                            <small class="form-text text-danger"><span asp-validation-for="Name"></span>@ViewBag.NoMoney</small>
-                        </div>
-                    </div>
-                    <hr>
-                    <button type="submit" class="btn btn-success float-right">Create Shop!</button>
-                </form>
-            </div>
-        </div>
-        </text>
-    }
-    else{
-        <h1>@ViewBag.MyShop.Name</h1>
-        <table class="table table-hover">
-            <thead>
+<h1>@ViewBag.MyShop.Name</h1>
+@model IDictionary<int, ListedProduct>
+<form action="update" method="POST">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+            <th scope="col" class="text-center" ><h5>Item</h5></th>
+            <th scope="col" class="text-center" ><h5>Amount (Current)</h5></th>
+            <th scope="col" class="text-center" ><h5>Price Per Item (Current)</h5></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                @for(var i = 0; i < ViewBag.MyShop.Products.Count; i++){
                 <tr>
-                <th scope="col"><h5>Item</h5></th>
-                <th scope="col"><h5>Amount</h5></th>
-                <th scope="col"><h5>Price Per Item</h5></th>
+                    <input type="hidden" name="@("UpdateProds[" + @i + "].Key")" value=@ViewBag.MyShop.Products[i].ListedProductId>
+                    <th class="text-center" scope="row" style="vertical-align: middle;">
+                        <img src="~/images/@ViewBag.MyShop.Products[i].Product.Image" class="inventory">
+                        <h5>@ViewBag.MyShop.Products[i].Product.Name</h5>
+                    </th>
+                    <td class="text-center" style="vertical-align: middle;"><h5>
+                        <input name="@("UpdateProds[" + @i + "].Value.Stock")" type="number" step="1" 
+                        min="0" max=@ViewBag.MyShop.Products[i].Stock required value=@ViewBag.MyShop.Products[i].Stock>
+                        (Currently: @ViewBag.MyShop.Products[i].Stock)</h5>
+                    </td>
+                    <td class="text-center" style="vertical-align: middle;"><h5>
+                        <input name="@("UpdateProds[" + @i + "].Value.Price")" type="number" step="0.01" 
+                        min="0" max="999999.99" required value=@ViewBag.MyShop.Products[i].Price>
+                        (Currently: @ViewBag.MyShop.Products[i].Price)</h5>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach(ListedProduct prod in ViewBag.MyShop.Products){
-                    <text>
-                    <tr>
-                        <th scope="row" style="vertical-align: middle;"><img src="~/images/@prod.Product.Image" class="inventory"><h5>@prod.Product.Name</h5></th>
-                        <td style="vertical-align: middle;"><h5>@prod.Stock</h5></td>
-                        <td style="vertical-align: middle;"><h5>@prod.Price</h5></td>
-                    </tr>
-                    </text>
                 }
-            </tbody>
-        </table>
-    }
-}
+            }
+        </tbody>
+    </table>
+    <div class="float-right">
+        <button type="submit" class="btn btn-success">Update Shop!</button>
+    </div>
+</form>

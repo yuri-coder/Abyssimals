@@ -41,7 +41,10 @@ namespace SpiritMarket.Controllers
             ViewBag.MyShop = context.Shops.Include(shop => shop.Products).ThenInclude(listed => listed.Product).
             SingleOrDefault(shop => shop.UserId == HttpContext.Session.GetInt32("UserId"));
             ViewBag.NoMoney = TempData["NoMoney"];
-            return View();
+            if(ViewBag.MyShop == null){
+                return View("CreateMyShop");
+            }
+            return View("MyShop");
         }
 
         [HttpPost]
@@ -82,6 +85,36 @@ namespace SpiritMarket.Controllers
             }
             return View();
         } 
+
+        [HttpPost]
+        [Route("update")]
+        public IActionResult UpdateStock(IDictionary<int, ListedProduct> UpdateProds){
+            ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            foreach(KeyValuePair<int, ListedProduct> Prod in UpdateProds){
+                ListedProduct ExistingProduct = context.GetOneListedProduct(Prod.Key);
+                int AmountDifference = ExistingProduct.Stock - Prod.Value.Stock;
+                if(AmountDifference > 0){
+                    Console.WriteLine("Adding " + AmountDifference + " back to inventory!");
+                    Inventory AddBack = new Inventory();
+                    AddBack.ProductId = ExistingProduct.ProductId;
+                    AddBack.UserId = ViewBag.User.UserId;
+                    AddBack.Amount = AmountDifference;
+                    context.AddToInventory(AddBack);
+                }
+                if(ExistingProduct.Stock <= 0 || Prod.Value.Stock <= 0){
+                    Console.WriteLine("About to delete this product!");
+                    context.Remove(ExistingProduct);
+                    continue;
+                }
+                ExistingProduct.Price = Prod.Value.Price;
+                ExistingProduct.Stock = Prod.Value.Stock;
+            }
+            context.SaveChanges();
+            return RedirectToAction("MyShop");
+        }
 
         
 

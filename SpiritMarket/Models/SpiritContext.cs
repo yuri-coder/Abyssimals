@@ -44,6 +44,13 @@ namespace SpiritMarket.Models
             return this.Products.SingleOrDefault(product => product.Name == ProductName);
         }
 
+        public ListedProduct GetOneListedProduct(int? ListedProductId){
+            if(ListedProductId == null){
+                return null;
+            }
+            return this.Listed_Products.SingleOrDefault(listed => listed.ListedProductId == ListedProductId);
+        }
+
         public List<Inventory> GetUserInventory(int? UserId){
             if(UserId == null){
                 return null;
@@ -52,6 +59,9 @@ namespace SpiritMarket.Models
         }
 
         public void AddToInventory(Inventory Item){
+            if(Item.Amount <= 0){
+                return;
+            }
             int UserId = Item.UserId;
             List<Inventory> UserInventory = this.Users.Include(user => user.Items).
                         SingleOrDefault(user => user.UserId == UserId).Items;
