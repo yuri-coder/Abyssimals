@@ -93,12 +93,16 @@ namespace SpiritMarket.Controllers
             if(ViewBag.Shop == null || ViewBag.Shop.UserId == ViewBag.User.UserId){
                 return RedirectToAction("MyShop");
             }
+
+            ViewBag.Success = TempData["Success"];
+            ViewBag.Error = TempData["Error"];
             return View();
         } 
 
         [HttpPost]
-        [Route("{user}/{itemid}/{amount}")]
+        [Route("{user}/{itemid}")]
         public IActionResult PurchaseItem(string user, int itemid, int amount){
+            Console.WriteLine("In PurchaseItem");
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
@@ -106,6 +110,13 @@ namespace SpiritMarket.Controllers
             ListedProduct Item = context.GetOneListedProduct(itemid);
             if(Item == null){
                 return RedirectToAction("OtherShop", new{ username = user});
+            }
+
+            if(context.PurchaseItem(ViewBag.User, Item, amount)){
+                TempData["Success"] = "Thank you for your purchase!";
+            }
+            else{
+                TempData["Error"] = "Something went wrong with your purchase...";
             }
             
             return RedirectToAction("OtherShop", new{ username = user});

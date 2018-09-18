@@ -7,71 +7,79 @@
 
 <h1>@ViewBag.Shop.Name</h1>
 <h5>Owned by @ViewBag.OtherUser.Username</h5>
+<h5 class="text-success">@ViewBag.Success</h5>
+<h5 class="text-danger">@ViewBag.Error</h5>
 @{
     foreach(ListedProduct item in @ViewBag.Shop.Products)
     {
-        var addid = "addform" + @item.ListedProductId;
-        var popupid = "popup" + @item.ListedProductId;
-        <text>
-            <div id="@addid" class="d-none">
-                <button onclick="testfunction()" class="btn btn-success addshop">Add to Shop</button>
-            </div>
-            <a tabindex="@item.InventoryId" data-container="body" id = "@popupid" 
-            data-toggle="popover" title="@item.Product.Name x @item.Amount"
-            data-itemname="@item.Product.Name" data-itemamount="@item.Amount" data-sellable="@item.Product.IsTradeable"
-            data-inventoryid="@item.InventoryId">
-                <img class="inventory m-0" src="~/images/@item.Product.Image" style="border: 0;">
-            </a>
-        </text>
+        if(item.Price > 0){
+            var buyid = "buyform" + @item.ListedProductId;
+            var popupid = "popup" + @item.ListedProductId;
+            <text>
+                <div id="@buyid" class="d-none">
+                    <button onclick="testfunction()" class="btn btn-success buyitem">Buy</button>
+                </div>
+                <a tabindex="@item.ListedProductId" data-container="body" id = "@popupid" 
+                data-toggle="popover" title="@item.Product.Name x @item.Stock <br> @item.Price SG"
+                data-itemname="@item.Product.Name" data-itemamount="@item.Stock" data-username="@ViewBag.OtherUser.Username"
+                data-stockid="@item.ListedProductId" data-unitprice="@item.Price">
+                    <img class="inventory m-0" src="~/images/@item.Product.Image" style="border: 0;">
+                </a>
+            </text>
+        }
     }
 }
 
 @section Scripts{
     <script>
     $(function(){
+        var balance = parseFloat(@ViewBag.User.Balance);
         $('[data-toggle="popover"]').popover({
             html: true,
             trigger: 'click',
+            //title: $(this).data("itemname") + " x" + $(this).data("itemamount") + "<br>" + $(this).data("unitprice") + " SG",
             placement: 'right',
             content: function(){
-                var successid = "addform" + $(this).data("inventoryid");
-                var tradehtml = $(this).data("sellable") == "True" ? 
-                                $("#" + successid).html() : "";
-                var discardhtml = '<a href="/inventory/get/starterkit" class="btn btn-danger" role="button">Discard</a>'
-                return '<div class="btn-group-vertical" data-popupid="' + $(this).data("inventoryid") + '">' +
-                        tradehtml + discardhtml + "</div>";
+            return '<form class="parentform" action="' + $(this).data("username") + '/' + $(this).data("stockid") + '" method="post">' +
+                        '<div class="form-group row">' + 
+                            '<label for="amount" class="col-sm-6 col-form-label"><h5>Amount</h5></label>' + 
+                            '<div class="col-sm-6">' + 
+                                '<input class="form-control dynamicamount" data-unitprice="' + $(this).data("unitprice") + '" data-stockid="' + 
+                                $(this).data("stockid") + '" id="amount" type="number" step="1" name="amount" min="1" max="' + 
+                                $(this).data("itemamount") + '" required value="1">' + 
+                            '</div>' +
+                        '</div>' + 
+                        '<div class="row">' + 
+                            '<h5 class="col-sm-6">Price</h5>' + 
+                            '<h5 class="col-sm-6 dynamicprice" id="price' + 
+                            $(this).data("stockid") + '">' + $(this).data("unitprice") + ' SG</h5>' + 
+                        '</div>' + 
+                        '<button type="submit" class="btn btn-success" id="buy' + $(this).data("stockid") + '">Buy</button>' + 
+                    '</form>';
             }
         });
-        function testfunction(){
-            alert("hello!");
-        }
-        $("body").on("click", ".inventory", function(){
-            $(".addshop").on("click", function(){ 
-                var inventoryid = $(this).parent().attr("data-popupid");
-                var popupid = "popup" + inventoryid;
-                var dataelement = $("#" + popupid);
-                var sampledata = dataelement.attr("data-sellable");
-                var heldamount = dataelement.attr("data-itemamount");
 
-                $(this).closest(".popover-body").html(
-                    '<form action="inventory/add" method="post">' + 
-                    '<input type="hidden" name="InventoryId" value="' + inventoryid + '">' + 
-                    '<div class = "form-group row">' +
-                        '<label for="amount" class="col-sm-6 col-form-label"><h5>Amount</h5></label>' +
-                        '<div class="col-sm-6">' + 
-                            '<input class="form-control" id="amount" type="number" step="1" name="Amount" min="1" max="' + heldamount + '" required value="1">' + 
-                        '</div>' + 
-                    '</div>' + 
-                    '<div class="form-group row">' + 
-                        '<label for="price" class="col-sm-6 col-form-label"><h5>Price</h5></label>' +
-                        '<div class="col-sm-6">' + 
-                            '<input class="form-control" id="price" type="number" step="0.01" name="Price" min="0" max="999999.99" required value="0">' + 
-                        '</div>' + 
-                    '</div>' +
-                    '<button type="submit" class="btn btn-success">Add to Shop</button></form>'
-                );
-                $(this).closest(".popover").css({"max-width":"none !important", "width":"auto"})
-                //alert("clicked a button!");
+        $("body").on("click", ".inventory", function(){
+            $(".dynamicamount").on("input", function(){ 
+
+                var unitprice = parseFloat($(this).data("unitprice"));
+                var amount = parseInt($(this).val());
+                var totalprice = Math.round(unitprice * amount * 100) / 100;
+                var textcolor = totalprice > balance ? "red" : "black";
+                //alert("Total price is " + totalprice);
+
+                $("#price" + $(this).data("stockid")).html(totalprice + " SG");
+                $("#price" + $(this).data("stockid")).css({"color": textcolor});
+                if(textcolor == "red"){
+                     $("#buy" + $(this).data("stockid")).attr("disabled", true);
+                }
+                else{
+                    $("#buy" + $(this).data("stockid")).attr("disabled", false);
+                }
+
+                //$(this).closest(".parentform").children(".dynamicprice").html(totalprice);
+                //$(this).closest(".parentform").children(".dynamicprice").css({"text-color": textcolor});
+                //alert("Text color is " + textcolor);
             });
         });
     });

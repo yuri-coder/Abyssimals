@@ -118,6 +118,36 @@ namespace SpiritMarket.Models
             return true;
         }
 
+        public bool PurchaseItem(User Buyer, ListedProduct Item, int Amount){
+            if(Buyer == null || Item == null || Amount <= 0 || Amount > Item.Stock){
+                return false;
+            } 
+            User ShopOwner = this.Users.Include(user => user.Shop).SingleOrDefault(user => user.Shop.ShopId == Item.ShopId);
+            if(ShopOwner == null){
+                return false;
+            }
+            decimal TotalPrice = Item.Price * Amount;
+            if(TotalPrice > Buyer.Balance){
+                return false;
+            }
+
+            Buyer.SubtractMoney(TotalPrice);
+            ShopOwner.Balance += TotalPrice;
+
+            Item.Stock -= Amount;
+            if(Item.Stock == 0){
+                this.Remove(Item);
+            }
+
+            Inventory BoughtItem = new Inventory();
+            BoughtItem.UserId = Buyer.UserId;
+            BoughtItem.ProductId = Item.ProductId;
+            BoughtItem.Amount = Amount;
+            AddToInventory(BoughtItem);
+            
+            return true;
+        }
+
         public bool RemoveItemFromInventory(Inventory Item, int Amount){
             if(Item.Amount < Amount)
                 return false;
