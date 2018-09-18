@@ -170,7 +170,7 @@ namespace SpiritMarket.Controllers
         public IActionResult AddMoney(){
             User CurUser = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(CurUser != null){
-                CurUser.Balance += (decimal) 25.5;
+                CurUser.Balance += 25;
                 context.SaveChanges();
             }
             return RedirectToAction("Index", "Home");

@@ -5,8 +5,8 @@ namespace SpiritMarket.Models{
         [Key]
         public int ListedProductId {get; set;}
 
-        private decimal price;
-        public decimal Price {
+        private long price;
+        public long Price {
             get{
                 return price;
             } 

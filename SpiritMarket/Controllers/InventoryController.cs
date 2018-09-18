@@ -36,7 +36,7 @@ namespace SpiritMarket.Controllers
 
         [HttpPost]
         [Route("add")]
-        public IActionResult AddItemToShop(int InventoryId, int Amount, decimal Price){
+        public IActionResult AddItemToShop(int InventoryId, int Amount, long Price){
             Inventory Item = context.Inventories.Include(inventory => inventory.Product).SingleOrDefault(inventory => inventory.InventoryId == InventoryId);
             if(Item == null){
                 TempData["Error"] = "It appears as though that item isn't in your inventory! Did you already do something with it?";

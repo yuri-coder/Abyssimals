@@ -25,7 +25,7 @@ namespace SpiritMarket.Models{
         public string ConfirmPassword {get; set;}
 
 
-        public decimal Balance {get; set;}
+        public long Balance {get; set;}
 
         public Shop Shop {get; set;}
 
@@ -44,7 +44,7 @@ namespace SpiritMarket.Models{
             Updated_At = DateTime.Now;
         }
 
-        public bool SubtractMoney(decimal amt){
+        public bool SubtractMoney(long amt){
             if(amt > Balance){
                 return false;
             }

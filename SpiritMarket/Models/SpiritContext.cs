@@ -83,7 +83,7 @@ namespace SpiritMarket.Models
             this.SaveChanges();
         }
 
-        public bool AddToShop(Inventory Item, Shop UserShop, int Stock, decimal Price){
+        public bool AddToShop(Inventory Item, Shop UserShop, int Stock, long Price){
             if(Item.Amount < Stock){
                 return false;
             }
@@ -103,7 +103,9 @@ namespace SpiritMarket.Models
             }
             if(AlreadyOnSale){
                 OnSaleProduct.Stock += Stock;
-                OnSaleProduct.Price = Price;
+                if(Price != 0){
+                    OnSaleProduct.Price = Price;
+                }
             }
             else{
                 NewProduct.ProductId = Item.ProductId;
@@ -126,7 +128,7 @@ namespace SpiritMarket.Models
             if(ShopOwner == null){
                 return false;
             }
-            decimal TotalPrice = Item.Price * Amount;
+            long TotalPrice = Item.Price * Amount;
             if(TotalPrice > Buyer.Balance){
                 return false;
             }

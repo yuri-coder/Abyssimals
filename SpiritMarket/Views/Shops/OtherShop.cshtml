@@ -37,7 +37,6 @@
         $('[data-toggle="popover"]').popover({
             html: true,
             trigger: 'click',
-            //title: $(this).data("itemname") + " x" + $(this).data("itemamount") + "<br>" + $(this).data("unitprice") + " SG",
             placement: 'right',
             content: function(){
             return '<form class="parentform" action="' + $(this).data("username") + '/' + $(this).data("stockid") + '" method="post">' +
@@ -64,10 +63,8 @@
 
                 var unitprice = parseFloat($(this).data("unitprice"));
                 var amount = parseInt($(this).val());
-                var totalprice = Math.round(unitprice * amount * 100) / 100;
+                var totalprice = unitprice * amount;
                 var textcolor = totalprice > balance ? "red" : "black";
-                //alert("Total price is " + totalprice);
-
                 $("#price" + $(this).data("stockid")).html(totalprice + " SG");
                 $("#price" + $(this).data("stockid")).css({"color": textcolor});
                 if(textcolor == "red"){
@@ -76,10 +73,6 @@
                 else{
                     $("#buy" + $(this).data("stockid")).attr("disabled", false);
                 }
-
-                //$(this).closest(".parentform").children(".dynamicprice").html(totalprice);
-                //$(this).closest(".parentform").children(".dynamicprice").css({"text-color": textcolor});
-                //alert("Text color is " + textcolor);
             });
         });
     });

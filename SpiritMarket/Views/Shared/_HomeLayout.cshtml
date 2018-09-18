@@ -30,7 +30,7 @@
                 <li class="nav-item">
                     @{
                         User user = (User) @ViewData["User"];
-                        decimal balance = Math.Truncate(100 * user.Balance) / 100;
+                        long balance = user.Balance;
                     }
                     <h5 class="navbar-text">Hi @user.Username! (@balance SG)</h5>
                 </li>
