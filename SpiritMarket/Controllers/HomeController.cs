@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using SpiritMarket.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting;
 
 namespace SpiritMarket.Controllers
 {
     public class HomeController : Controller
     {
         private SpiritContext context;
+        private IHostingEnvironment _env;
 
-        public HomeController(SpiritContext c){
+        public HomeController(SpiritContext c, IHostingEnvironment env){
             context = c;
+            _env = env;
         }
 
         [HttpGet]
@@ -110,6 +114,7 @@ namespace SpiritMarket.Controllers
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User.IsAdmin)
                 return RedirectToAction("AdminHome", "Admin");
+            // ViewBag.WebRoot = _env.WebRootPath;
             return View();
         }
 

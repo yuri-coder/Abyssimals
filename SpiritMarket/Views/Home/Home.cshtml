@@ -5,6 +5,9 @@
     ViewData["User"] = @ViewBag.User;
 }
 
-<h1>Welcome home, @ViewBag.User.Username! (User# @ViewBag.User.UserId )</h1>
-<h1>Hello @ViewBag.User.Username</h1>
-<a href="user/logout">Logout?</a>
+<h1>Welcome home, @ViewBag.User.Username!</h1>
+<div id="randomevent"></div>
+
+@section Scripts{
+    <script src="~/js/dialogue.js" data-textfile="../texts/example.json"></script>
+}
