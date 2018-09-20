@@ -4,5 +4,6 @@
         "This is the first dialogue",
         "And here is the second dialogue!",
         "Here is a third dialogue<br>With more stuff<br>And even more stuff"
-    ]
+    ],
+    "CloseTrigger": "LastDialogue"
 }

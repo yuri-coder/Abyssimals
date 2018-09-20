@@ -10,6 +10,8 @@ $(document).ready(function(){
 
     var DialogueList;
     var DialogueIndex;
+    var CloseTrigger;
+
     $.getJSON(textfile, function(data){
 
         
@@ -17,6 +19,7 @@ $(document).ready(function(){
         DialogueList = data["Dialogues"];
         DialogueIndex = 0;
         var Header = data["SceneTitle"] || "Event";
+        CloseTrigger = data["CloseTrigger"];
 
         $("#randomevent").html(function(){
             var toreturn =  '<div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 75%;">' + 
@@ -34,16 +37,32 @@ $(document).ready(function(){
         updateDialogueButtons();
     });
 
-    $("body").on("click", ".nextdialogue", function(){
+    function defaultNextDialogue() {
         DialogueIndex += 1;
-        $(".dialoguecontent").html(DialogueList[DialogueIndex]);
+
+        $(".dialoguecontent").fadeOut(function(){
+            $(this).html(DialogueList[DialogueIndex]);
+        }).fadeIn();
+
         updateDialogueButtons();
+    }
+
+    function defaultBackDialogue() {
+        DialogueIndex -= 1;
+
+        $(".dialoguecontent").fadeOut(function(){
+            $(this).html(DialogueList[DialogueIndex]);
+        }).fadeIn();
+
+        updateDialogueButtons();
+    }
+
+    $("body").on("click", ".nextdialogue", function(){
+        defaultNextDialogue();
     })
 
     $("body").on("click", ".backdialogue", function(){
-        DialogueIndex -= 1;
-        $(".dialoguecontent").html(DialogueList[DialogueIndex]);
-        updateDialogueButtons();
+        defaultBackDialogue()
     })
 
     function updateDialogueButtons(){
@@ -54,10 +73,38 @@ $(document).ready(function(){
             $(".backdialogue").attr("disabled", true);
         }
         if(DialogueIndex < DialogueList.length - 1){
-            $(".nextdialogue").attr("disabled", false);
+            switch(CloseTrigger){
+                case "LastDialogue":
+                    if($(".nextdialogue").hasClass("btn-warning")){
+                        $(".nextdialogue").fadeOut(function(){
+                            $(this).text("Next").addClass("btn-success").removeClass("btn-warning text-light");
+                        }).fadeIn();
+                        $("body").off("click", ".nextdialogue");
+                        $("body").on("click", ".nextdialogue", function(){
+                            defaultNextDialogue();
+                        });
+                    }
+                    break;
+                default:
+                    $(".nextdialogue").attr("disabled", false);    
+            }
         }
         else{
-            $(".nextdialogue").attr("disabled", true);
+            switch(CloseTrigger){
+                case "LastDialogue":
+                    $(".nextdialogue").fadeOut(function(){
+                        $(this).text("Finish").addClass("btn-warning text-light").removeClass("btn-success");
+                    }).fadeIn();
+                        //$(".nextdialogue").text("Finish").addClass("btn-warning text-light").removeClass("btn-success");
+                    $("body").on("click", ".nextdialogue", function(){
+                        $("#randomevent").fadeOut(function(){
+                            $(this).remove();
+                        });
+                    });
+                    break;
+                default:
+                    $(".nextdialogue").attr("disabled", true);
+            }
         }
     }
 
