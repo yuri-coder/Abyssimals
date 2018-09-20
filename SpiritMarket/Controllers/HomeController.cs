@@ -112,8 +112,6 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
-            if(ViewBag.User.IsAdmin)
-                return RedirectToAction("AdminHome", "Admin");
             // ViewBag.WebRoot = _env.WebRootPath;
             return View();
         }

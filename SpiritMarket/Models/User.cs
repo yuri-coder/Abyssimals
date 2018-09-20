@@ -8,16 +8,19 @@ namespace SpiritMarket.Models{
         [Key]
         public int UserId {get; set;}
 
-        [Required(ErrorMessage = "Please provide a username")]
-        [MinLength(3)]
-        [MaxLength(32)]
+        [Required(ErrorMessage = "Please provide a username!")]
+        [MinLength(3, ErrorMessage="Make sure your name is at least 3 characters long.")]
+        [MaxLength(32, ErrorMessage="Whoah there, think you can tone that down to 32 characters or less?")]
+        [RegularExpression("^[\\w]+$", ErrorMessage="Only alphanumeric and underscores, please!")]
         public string Username {get; set;}
 
-        [Required(ErrorMessage = "We kinda need this")]
+        [Required(ErrorMessage = "We kinda need this...")]
         [DataType(DataType.Password)]
+        [MinLength(8, ErrorMessage="Make sure your password is at least 8 characters long (for security!)")]
+        [RegularExpression("^[\\w!#\\^\\$\\.\\?\\*\\+-]+$", ErrorMessage="Only alphanumeric as well as special characters !#$^.?*+-_ allowed.")]
         public string Password {get; set;}
 
-        [Required(ErrorMessage = "This wasn't optional")]
+        [Required(ErrorMessage = "This wasn't optional!")]
         [Display(Name="Confirm Password")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Passwords must match!")]

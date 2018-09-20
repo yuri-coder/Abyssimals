@@ -32,7 +32,7 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
-            return View();
+            return View("Home");
         }
 
         [HttpGet]

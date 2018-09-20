@@ -5,17 +5,13 @@ $(document).ready(function(){
         var scriptName = lastScript;
         return scriptName.getAttribute('data-textfile');
     }
+    
     var textfile = getSyncScriptParams();
-
-
     var DialogueList;
     var DialogueIndex;
     var CloseTrigger;
 
     $.getJSON(textfile, function(data){
-
-        
-
         DialogueList = data["Dialogues"];
         DialogueIndex = 0;
         var Header = data["SceneTitle"] || "Event";
@@ -95,7 +91,6 @@ $(document).ready(function(){
                     $(".nextdialogue").fadeOut(function(){
                         $(this).text("Finish").addClass("btn-warning text-light").removeClass("btn-success");
                     }).fadeIn();
-                        //$(".nextdialogue").text("Finish").addClass("btn-warning text-light").removeClass("btn-success");
                     $("body").on("click", ".nextdialogue", function(){
                         $("#randomevent").fadeOut(function(){
                             $(this).remove();
@@ -107,7 +102,6 @@ $(document).ready(function(){
             }
         }
     }
-
 });
 
 
