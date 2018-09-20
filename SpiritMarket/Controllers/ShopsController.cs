@@ -70,7 +70,8 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("MyShop");
             }
             else{
-                return View("MyShop");
+                TempData["NoMoney"] = "Make your shop name shorter, dumdum";
+                return RedirectToAction("MyShop");
             }
         }
 
