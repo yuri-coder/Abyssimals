@@ -11,10 +11,10 @@ namespace SpiritMarket.Models
         public SpiritContext(DbContextOptions<SpiritContext> options) : base(options) { }
 
         public DbSet<User> Users {get; set;}
-        public DbSet<Product> Products {get; set;}
+        public DbSet<Item> Items {get; set;}
         public DbSet<Shop> Shops {get; set;}
-        public DbSet<ListedProduct> Listed_Products{get; set;}
-        public DbSet<Inventory> Inventories{get; set;}
+        public DbSet<ListedItem> ListedItems{get; set;}
+        public DbSet<InventoryItem> InventoryItems{get; set;}
 
         public User GetOneUser(string Username){
             return this.Users.SingleOrDefault(user => user.Username == Username);
@@ -34,41 +34,41 @@ namespace SpiritMarket.Models
             return this.Shops.SingleOrDefault(shop => shop.UserId == UserId);
         }
 
-        public Product GetOneProduct(int? ProductId){
-            if(ProductId == null){
+        public Item GetOneItem(int? ItemId){
+            if(ItemId == null){
                 return null;
             }
-            return this.Products.SingleOrDefault(product => product.ProductId == ProductId);
+            return this.Items.SingleOrDefault(Item => Item.ItemId == ItemId);
         }
-        public Product GetOneProduct(string ProductName){
-            return this.Products.SingleOrDefault(product => product.Name == ProductName);
+        public Item GetOneItem(string ItemName){
+            return this.Items.SingleOrDefault(Item => Item.Name == ItemName);
         }
 
-        public ListedProduct GetOneListedProduct(int? ListedProductId){
-            if(ListedProductId == null){
+        public ListedItem GetOneListedItem(int? ListedItemId){
+            if(ListedItemId == null){
                 return null;
             }
-            return this.Listed_Products.SingleOrDefault(listed => listed.ListedProductId == ListedProductId);
+            return this.ListedItems.SingleOrDefault(listed => listed.ListedItemId == ListedItemId);
         }
 
-        public List<Inventory> GetUserInventory(int? UserId){
+        public List<InventoryItem> GetUserInventory(int? UserId){
             if(UserId == null){
                 return null;
             }
-            return this.Inventories.Where(inventory => inventory.UserId == UserId).ToList();
+            return this.InventoryItems.Where(inventory => inventory.UserId == UserId).ToList();
         }
 
-        public void AddToInventory(Inventory Item){
+        public void AddToInventory(InventoryItem Item){
             if(Item.Amount <= 0){
                 return;
             }
             int UserId = Item.UserId;
-            List<Inventory> UserInventory = this.Users.Include(user => user.Items).
+            List<InventoryItem> UserInventory = this.Users.Include(user => user.Items).
                         SingleOrDefault(user => user.UserId == UserId).Items;
             bool ItemExists = false;
-            Inventory ExistingItem = null;
-            foreach(Inventory HeldItem in UserInventory){
-                if(Item.ProductId == HeldItem.ProductId){
+            InventoryItem ExistingItem = null;
+            foreach(InventoryItem HeldItem in UserInventory){
+                if(Item.ItemId == HeldItem.ItemId){
                     ItemExists = true;
                     ExistingItem = HeldItem;
                     break;
@@ -83,36 +83,36 @@ namespace SpiritMarket.Models
             this.SaveChanges();
         }
 
-        public bool AddToShop(Inventory Item, Shop UserShop, int Stock, long Price){
+        public bool AddToShop(InventoryItem Item, Shop UserShop, int Stock, long Price){
             if(Item.Amount < Stock){
                 return false;
             }
-            ListedProduct NewProduct = new ListedProduct();
+            ListedItem NewItem = new ListedItem();
             if(UserShop == null){
                 return false;
             }
-            List<ListedProduct> ShopStock = UserShop.Products;
+            List<ListedItem> ShopStock = UserShop.Items;
             bool AlreadyOnSale = false;
-            ListedProduct OnSaleProduct = null;
-            foreach(ListedProduct OnSale in ShopStock){
-                if(OnSale.ProductId == Item.ProductId){
+            ListedItem OnSaleItem = null;
+            foreach(ListedItem OnSale in ShopStock){
+                if(OnSale.ItemId == Item.ItemId){
                     AlreadyOnSale = true;
-                    OnSaleProduct = OnSale;
+                    OnSaleItem = OnSale;
                     break;
                 }
             }
             if(AlreadyOnSale){
-                OnSaleProduct.Stock += Stock;
+                OnSaleItem.Stock += Stock;
                 if(Price != 0){
-                    OnSaleProduct.Price = Price;
+                    OnSaleItem.Price = Price;
                 }
             }
             else{
-                NewProduct.ProductId = Item.ProductId;
-                NewProduct.Price = Price;
-                NewProduct.ShopId = UserShop.ShopId;
-                NewProduct.Stock = Stock;
-                this.Add(NewProduct);
+                NewItem.ItemId = Item.ItemId;
+                NewItem.Price = Price;
+                NewItem.ShopId = UserShop.ShopId;
+                NewItem.Stock = Stock;
+                this.Add(NewItem);
             }
             RemoveItemFromInventory(Item, Stock);
             this.SaveChanges();
@@ -120,7 +120,7 @@ namespace SpiritMarket.Models
             return true;
         }
 
-        public bool PurchaseItem(User Buyer, ListedProduct Item, int Amount){
+        public bool PurchaseItem(User Buyer, ListedItem Item, int Amount){
             if(Buyer == null || Item == null || Amount <= 0 || Amount > Item.Stock){
                 return false;
             } 
@@ -141,16 +141,16 @@ namespace SpiritMarket.Models
                 this.Remove(Item);
             }
 
-            Inventory BoughtItem = new Inventory();
+            InventoryItem BoughtItem = new InventoryItem();
             BoughtItem.UserId = Buyer.UserId;
-            BoughtItem.ProductId = Item.ProductId;
+            BoughtItem.ItemId = Item.ItemId;
             BoughtItem.Amount = Amount;
             AddToInventory(BoughtItem);
             
             return true;
         }
 
-        public bool RemoveItemFromInventory(Inventory Item, int Amount){
+        public bool RemoveItemFromInventory(InventoryItem Item, int Amount){
             if(Item.Amount < Amount)
                 return false;
             Item.Amount -= Amount;

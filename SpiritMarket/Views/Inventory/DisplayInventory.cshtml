@@ -10,18 +10,18 @@
 
 @{   
     if(@ViewBag.Inventory != null){
-        foreach(Inventory item in @ViewBag.Inventory){
-            var addid = "addform" + @item.InventoryId;
-            var popupid = "popup" + @item.InventoryId;
+        foreach(InventoryItem item in @ViewBag.Inventory){
+            var addid = "addform" + @item.InventoryItemId;
+            var popupid = "popup" + @item.InventoryItemId;
             <text>
                 <div id="@addid" class="d-none">
-                    <button onclick="testfunction()" class="btn btn-success addshop">Add to Shop</button>
+                    <button class="btn btn-success addshop">Add to Shop</button>
                 </div>
-                <a tabindex="@item.InventoryId" data-container="body" id = "@popupid" 
-                data-toggle="popover" title="@item.Product.Name x @item.Amount"
-                data-itemname="@item.Product.Name" data-itemamount="@item.Amount" data-sellable="@item.Product.IsTradeable"
-                data-inventoryid="@item.InventoryId">
-                    <img class="inventory m-0" src="~/images/@item.Product.Image" style="border: 0;">
+                <a tabindex="@item.InventoryItemId" data-container="body" id = "@popupid" 
+                data-toggle="popover" title="@item.Item.Name x @item.Amount"
+                data-itemname="@item.Item.Name" data-itemamount="@item.Amount" data-sellable="@item.Item.IsTradeable"
+                data-inventoryitemid="@item.InventoryItemId">
+                    <img class="inventory m-0" src="~/images/@item.Item.Image" style="border: 0;">
                 </a>
             </text>
         }
@@ -42,28 +42,26 @@
             trigger: 'click',
             placement: 'right',
             content: function(){
-                var successid = "addform" + $(this).data("inventoryid");
+                var successid = "addform" + $(this).data("inventoryitemid");
                 var tradehtml = $(this).data("sellable") == "True" ? 
                                 $("#" + successid).html() : "";
                 var discardhtml = '<a href="/inventory/get/starterkit" class="btn btn-danger" role="button">Discard</a>'
-                return '<div class="btn-group-vertical" data-popupid="' + $(this).data("inventoryid") + '">' +
+                return '<div class="btn-group-vertical" data-popupid="' + $(this).data("inventoryitemid") + '">' +
                         tradehtml + discardhtml + "</div>";
             }
         });
-        function testfunction(){
-            alert("hello!");
-        }
+
         $("body").on("click", ".inventory", function(){
             $(".addshop").on("click", function(){ 
-                var inventoryid = $(this).parent().attr("data-popupid");
-                var popupid = "popup" + inventoryid;
+                var inventoryItemId = $(this).parent().attr("data-popupid");
+                var popupid = "popup" + inventoryItemId;
                 var dataelement = $("#" + popupid);
                 var sampledata = dataelement.attr("data-sellable");
                 var heldamount = dataelement.attr("data-itemamount");
 
                 $(this).closest(".popover-body").html(
                     '<form action="inventory/add" method="post">' + 
-                    '<input type="hidden" name="InventoryId" value="' + inventoryid + '">' + 
+                    '<input type="hidden" name="InventoryItemId" value="' + inventoryItemId + '">' + 
                     '<div class = "form-group row">' +
                         '<label for="amount" class="col-sm-6 col-form-label"><h5>Amount</h5></label>' +
                         '<div class="col-sm-6">' + 

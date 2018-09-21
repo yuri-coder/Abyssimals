@@ -32,7 +32,7 @@ namespace SpiritMarket.Models{
 
         public Shop Shop {get; set;}
 
-        public List<Inventory> Items {get; set;}
+        public List<InventoryItem> Items {get; set;}
 
         public DateTime Created_At{get; set;}
         public DateTime Updated_At{get; set;}
@@ -40,7 +40,7 @@ namespace SpiritMarket.Models{
         public Boolean IsAdmin {get; set;}
 
         public User(){
-            Items = new List<Inventory>();
+            Items = new List<InventoryItem>();
             Balance = 100;
             IsAdmin = false;
             Created_At = DateTime.Now;

@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 
 namespace SpiritMarket.Models{
-    public class Product{
+    public class Item{
         [Key]
-        public int ProductId{get; set;}
+        public int ItemId{get; set;}
 
-        [Required(ErrorMessage = "What's the name of this new product?")]
+        [Required(ErrorMessage = "What's the name of this new Item?")]
         [MinLength(2)]
         [MaxLength(64)]
         public string Name{get; set;}
@@ -23,15 +23,15 @@ namespace SpiritMarket.Models{
         [Display(Name="Tradeable")]
         public bool? IsTradeable {get; set;}
 
-        public List<ListedProduct> Shops {get; set;}
-        public List<Inventory> Users {get; set;}
+        public List<ListedItem> Shops {get; set;}
+        public List<InventoryItem> Users {get; set;}
 
         public DateTime Created_At{get; set;}
         public DateTime Updated_At{get; set;}
 
-        public Product(){
-            Shops = new List<ListedProduct>();
-            Users = new List<Inventory>();
+        public Item(){
+            Shops = new List<ListedItem>();
+            Users = new List<InventoryItem>();
             Created_At = DateTime.Now;
             Updated_At = DateTime.Now;
         }

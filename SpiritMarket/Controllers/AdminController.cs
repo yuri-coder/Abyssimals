@@ -31,7 +31,7 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.AdminMessage = TempData["AdminMessage"];
+            ViewBag.Success = TempData["AdminMessage"];
             return View("Home");
         }
 
@@ -58,14 +58,14 @@ namespace SpiritMarket.Controllers
 
         [HttpPost]
         [Route("item/new")]
-        public IActionResult CreateItem(Product p){
+        public IActionResult CreateItem(Item p){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
 
             if(ModelState.IsValid){
-                if(context.GetOneProduct(p.Name) != null){
+                if(context.GetOneItem(p.Name) != null){
                     ViewBag.NameError = "An item with that name already exists!";
                     return View("NewItem");
                 }
@@ -98,7 +98,7 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
-            ViewBag.AllProducts = context.Products.ToList();
+            ViewBag.AllItems = context.Items.ToList();
             return View();
         }
 
@@ -109,8 +109,8 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Product = context.GetOneProduct(pid);
-            if(ViewBag.Product == null){
+            ViewBag.Item = context.GetOneItem(pid);
+            if(ViewBag.Item == null){
                 TempData["AdminMessage"] = $"Item with the requested id {pid} not found!";
                 return RedirectToAction("AdminHome");
             }
@@ -119,21 +119,21 @@ namespace SpiritMarket.Controllers
 
         [HttpPost]
         [Route("item/edit/{pid}")]
-        public IActionResult EditItem(Product p, int pid){
+        public IActionResult EditItem(Item p, int pid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            Product original = context.GetOneProduct(pid);
+            Item original = context.GetOneItem(pid);
             if(original == null){
                 TempData["AdminMessage"] = $"Item with the requested id {pid} not found!";
                 return RedirectToAction("AdminHome");
             }
 
-            ViewBag.Product = original;
+            ViewBag.Item = original;
             if(ModelState.IsValid){
-                Product existing = context.GetOneProduct(p.Name);
-                if(existing != null && existing.ProductId != pid){
+                Item existing = context.GetOneItem(p.Name);
+                if(existing != null && existing.ItemId != pid){
                     ViewBag.NameError = "An item with that name already exists!";
                     return View("EditItem");
                 }

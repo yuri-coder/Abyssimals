@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 namespace SpiritMarket.Models{
-    public class ListedProduct{
+    public class ListedItem{
         [Key]
-        public int ListedProductId {get; set;}
+        public int ListedItemId {get; set;}
 
         private long price;
         public long Price {
@@ -19,14 +19,14 @@ namespace SpiritMarket.Models{
         public int ShopId {get; set;}
         public Shop Shop {get; set;}
 
-        public int ProductId {get; set;}
-        public Product Product {get; set;}
+        public int ItemId {get; set;}
+        public Item Item {get; set;}
 
 
         public DateTime Created_At{get; set;}
         public DateTime Updated_At{get; set;}
 
-        public ListedProduct(){
+        public ListedItem(){
             Stock = 0;
             Price = 0;
             Created_At = DateTime.Now;

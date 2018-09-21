@@ -6,7 +6,7 @@
 }
 
 <h1>@ViewBag.MyShop.Name</h1>
-@model IDictionary<int, ListedProduct>
+@model IDictionary<int, ListedItem>
 <form action="update" method="POST">
     <table class="table table-hover">
         <thead>
@@ -18,22 +18,22 @@
         </thead>
         <tbody>
             @{
-                @for(var i = 0; i < ViewBag.MyShop.Products.Count; i++){
+                @for(var i = 0; i < ViewBag.MyShop.Items.Count; i++){
                 <tr>
-                    <input type="hidden" name="@("UpdateProds[" + @i + "].Key")" value=@ViewBag.MyShop.Products[i].ListedProductId>
+                    <input type="hidden" name="@("UpdateProds[" + @i + "].Key")" value=@ViewBag.MyShop.Items[i].ListedItemId>
                     <th class="text-center" scope="row" style="vertical-align: middle;">
-                        <img src="~/images/@ViewBag.MyShop.Products[i].Product.Image" class="inventory">
-                        <h5>@ViewBag.MyShop.Products[i].Product.Name</h5>
+                        <img src="~/images/@ViewBag.MyShop.Items[i].Item.Image" class="inventory">
+                        <h5>@ViewBag.MyShop.Items[i].Item.Name</h5>
                     </th>
                     <td class="text-center" style="vertical-align: middle;"><h5>
                         <input name="@("UpdateProds[" + @i + "].Value.Stock")" type="number" step="1" 
-                        min="0" max=@ViewBag.MyShop.Products[i].Stock required value=@ViewBag.MyShop.Products[i].Stock>
-                        (Currently: @ViewBag.MyShop.Products[i].Stock)</h5>
+                        min="0" max=@ViewBag.MyShop.Items[i].Stock required value=@ViewBag.MyShop.Items[i].Stock>
+                        (Currently: @ViewBag.MyShop.Items[i].Stock)</h5>
                     </td>
                     <td class="text-center" style="vertical-align: middle;"><h5>
                         <input name="@("UpdateProds[" + @i + "].Value.Price")" type="number" step="1" 
-                        min="0" max="999999" required value=@ViewBag.MyShop.Products[i].Price>
-                        (Currently: @ViewBag.MyShop.Products[i].Price)</h5>
+                        min="0" max="999999" required value=@ViewBag.MyShop.Items[i].Price>
+                        (Currently: @ViewBag.MyShop.Items[i].Price)</h5>
                     </td>
                 </tr>
                 }

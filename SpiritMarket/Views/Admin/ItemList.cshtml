@@ -23,13 +23,13 @@
             </thead>
             <tbody>
                 @{
-                    foreach(Product prod in ViewBag.AllProducts){
+                    foreach(Item item in ViewBag.AllItems){
                         <tr>
-                            <th scope="row" style="vertical-align: middle;"><h5>@prod.ProductId</h5></th>
-                            <td style="vertical-align: middle;"><h5>@prod.Name</h5></td>
-                            <td style="vertical-align: middle;"><img src="~/images/@prod.Image" class="inventory"></td>
+                            <th scope="row" style="vertical-align: middle;"><h5>@item.ItemId</h5></th>
+                            <td style="vertical-align: middle;"><h5>@item.Name</h5></td>
+                            <td style="vertical-align: middle;"><img src="~/images/@item.Image" class="inventory"></td>
                             <td style="vertical-align: middle;">
-                                <a asp-controller="Admin" asp-action="EditItem" asp-route-pid=@prod.ProductId><button class="btn btn-success"><b>Edit</b></button></a>
+                                <a asp-controller="Admin" asp-action="EditItem" asp-route-pid=@item.ItemId><button class="btn btn-success"><b>Edit</b></button></a>
                             </td>
                         </tr>
                     }

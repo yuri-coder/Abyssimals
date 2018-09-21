@@ -12,7 +12,7 @@
         <h5 class="card-title">Please fill out this form to add an item to the database.</h5>
         <p class="card-text">All fields are mandatory.
         </p>
-        @model Product
+        @model Item
         <form asp-action = "CreateItem" asp-controller="Admin" method="post">
             <div class = "form-group row">
                 <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>

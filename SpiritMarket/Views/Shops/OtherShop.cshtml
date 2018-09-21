@@ -1,6 +1,8 @@
 @{
+    var titlesuffix = "'s shop";
+
     Layout = "_HomeLayout";
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = @ViewBag.OtherUser.Username + @titlesuffix;
     ViewData["Username"] = @ViewBag.User.Username;
     ViewData["User"] = @ViewBag.User;
 }
@@ -10,20 +12,20 @@
 <h5 class="text-success">@ViewBag.Success</h5>
 <h5 class="text-danger">@ViewBag.Error</h5>
 @{
-    foreach(ListedProduct item in @ViewBag.Shop.Products)
+    foreach(ListedItem item in @ViewBag.Shop.Items)
     {
         if(item.Price > 0){
-            var buyid = "buyform" + @item.ListedProductId;
-            var popupid = "popup" + @item.ListedProductId;
+            var buyid = "buyform" + @item.ListedItemId;
+            var popupid = "popup" + @item.ListedItemId;
             <text>
                 <div id="@buyid" class="d-none">
                     <button onclick="testfunction()" class="btn btn-success buyitem">Buy</button>
                 </div>
-                <a tabindex="@item.ListedProductId" data-container="body" id = "@popupid" 
-                data-toggle="popover" title="@item.Product.Name x @item.Stock <br> @item.Price SG"
-                data-itemname="@item.Product.Name" data-itemamount="@item.Stock" data-username="@ViewBag.OtherUser.Username"
-                data-stockid="@item.ListedProductId" data-unitprice="@item.Price">
-                    <img class="inventory m-0" src="~/images/@item.Product.Image" style="border: 0;">
+                <a tabindex="@item.ListedItemId" data-container="body" id = "@popupid" 
+                data-toggle="popover" title="@item.Item.Name x @item.Stock <br> @item.Price SG"
+                data-itemname="@item.Item.Name" data-itemamount="@item.Stock" data-username="@ViewBag.OtherUser.Username"
+                data-stockid="@item.ListedItemId" data-unitprice="@item.Price">
+                    <img class="inventory m-0" src="~/images/@item.Item.Image" style="border: 0;">
                 </a>
             </text>
         }

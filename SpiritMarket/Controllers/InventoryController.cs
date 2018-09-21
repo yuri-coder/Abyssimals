@@ -27,7 +27,7 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Inventory = context.Users.Include(user => user.Items).ThenInclude(i => i.Product).
+            ViewBag.Inventory = context.Users.Include(user => user.Items).ThenInclude(i => i.Item).
                                 SingleOrDefault(user => user.UserId == HttpContext.Session.GetInt32("UserId")).Items;
             ViewBag.Error = TempData["Error"];
             ViewBag.Success = TempData["Success"];
@@ -36,23 +36,23 @@ namespace SpiritMarket.Controllers
 
         [HttpPost]
         [Route("add")]
-        public IActionResult AddItemToShop(int InventoryId, int Amount, long Price){
-            Inventory Item = context.Inventories.Include(inventory => inventory.Product).SingleOrDefault(inventory => inventory.InventoryId == InventoryId);
+        public IActionResult AddItemToShop(int InventoryItemId, int Amount, long Price){
+            InventoryItem Item = context.InventoryItems.Include(inventory => inventory.Item).SingleOrDefault(inventory => inventory.InventoryItemId == InventoryItemId);
             if(Item == null){
                 TempData["Error"] = "It appears as though that item isn't in your inventory! Did you already do something with it?";
                 return RedirectToAction("DisplayInventory");
             }
-            Shop UserShop = context.Shops.Include(shop => shop.Products).
+            Shop UserShop = context.Shops.Include(shop => shop.Items).
                             SingleOrDefault(Shop=> Shop.UserId == HttpContext.Session.GetInt32("UserId"));
             if(UserShop == null){
                 TempData["Error"] = "Hey! It looks like you don't have a shop! Why don't you go make one now?";
                 return RedirectToAction("DisplayInventory");
             }
             if(context.AddToShop(Item, UserShop, Amount, Price)){
-                TempData["Success"] = Item.Product.Name + " x" + Amount + " was added to your shop!";
+                TempData["Success"] = Item.Item.Name + " x" + Amount + " was added to your shop!";
             }
             else{
-                TempData["Error"] = "Something went wrong when trying to add " + Item.Product.Name + " to your shop.";
+                TempData["Error"] = "Something went wrong when trying to add " + Item.Item.Name + " to your shop.";
             }
             return RedirectToAction("DisplayInventory");
         }
@@ -65,19 +65,19 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
             User current = ViewBag.User;
-            Inventory TestLeaf = new Inventory();
+            InventoryItem TestLeaf = new InventoryItem();
             TestLeaf.Amount = 3;
-            TestLeaf.ProductId = 1;
+            TestLeaf.ItemId = 1;
             TestLeaf.UserId = current.UserId;
 
-            Inventory TestEssence = new Inventory();
+            InventoryItem TestEssence = new InventoryItem();
             TestEssence.Amount = 2;
-            TestEssence.ProductId = 7;
+            TestEssence.ItemId = 7;
             TestEssence.UserId = current.UserId;
 
-            Inventory TestPetal = new Inventory();
+            InventoryItem TestPetal = new InventoryItem();
             TestPetal.Amount = 5;
-            TestPetal.ProductId = 2;
+            TestPetal.ItemId = 2;
             TestPetal.UserId = current.UserId;
             context.AddToInventory(TestLeaf);
             context.AddToInventory(TestEssence);

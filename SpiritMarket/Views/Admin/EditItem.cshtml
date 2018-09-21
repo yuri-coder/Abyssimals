@@ -6,35 +6,35 @@
 
 <div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 75%;">
     <div class="card-header border-success text-center">
-        <b>Editing @ViewBag.Product.Name</b>
+        <b>Editing @ViewBag.Item.Name</b>
     </div>
     <div class="card-body text-success">
         <h5 class="card-title">Please fill out this form to edit this item in the database.</h5>
         <p class="card-text">All fields are mandatory.
         </p>
-        @model Product
-        <form asp-action = "EditItem" asp-controller="Admin" asp-route-pid=@ViewBag.Product.ProductId method="post"  id="updateitem">
+        @model Item
+        <form asp-action = "EditItem" asp-controller="Admin" asp-route-pid=@ViewBag.Item.ItemId method="post"  id="updateitem">
             <div class = "form-group row">
                 <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Name" class="form-control" value=@ViewBag.Product.Name>
+                    <input asp-for="Name" class="form-control" value=@ViewBag.Item.Name>
                     <small class="form-text text-danger"><span asp-validation-for="Name"></span>@ViewBag.NameError</small>
                 </div>
                 <label asp-for="Description" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
-                    <p id="hideme" style="display:none;">@ViewBag.Product.Description</p>
+                    <p id="hideme" style="display:none;">@ViewBag.Item.Description</p>
                     <textarea asp-for="Description" class="form-control" rows="5" id="populate"></textarea>
                     <small class="form-text text-danger"><span asp-validation-for="Description"></span></small>
                 </div>
                 <label asp-for="Image" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Image" class="form-control" value=@ViewBag.Product.Image>
+                    <input asp-for="Image" class="form-control" value=@ViewBag.Item.Image>
                     <small class="form-text text-danger"><span asp-validation-for="Image"></span>@ViewBag.ImageError</small>
                 </div>
                 <label asp-for="IsTradeable" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8 text-center align-bottom">
                     @{
-                        bool val = @ViewBag.Product.IsTradeable ?? false;
+                        bool val = @ViewBag.Item.IsTradeable ?? false;
                         <p id="hidemetoo" style="display:none;">@val</p>
                     }
                     <input class="form-check-input m-auto" style="width: 25px; height: 25px;" type="checkbox" data-val="true" id="IsTradeable" name="IsTradeable" value="true">

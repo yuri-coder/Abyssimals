@@ -11,16 +11,30 @@
     </div>
     <div class="card-body text-success">
         <h5 class="card-title">Don't have a shop yet?</h5>
-            <p class="card-text">Spirit Shops are easy to set up! For a small fee of 75 Spirit Gems, you too can have your own shop!
-                Simply tell us what you want the name of your shop to be!
-            </p>
+            @{
+                @if(@ViewBag.NoMoney == null || @ViewBag.NoMoney.Length == 0)
+                {
+                    <text>
+                    <p class="card-text">Spirit Shops are easy to set up! For a small fee of 75 Spirit Gems, you too can have your own shop!
+                        Simply tell us what you want the name of your shop to be!
+                    </p>
+                    </text>
+                }
+                else
+                {
+                    <p class="card-text text-danger">
+                        @ViewBag.NoMoney
+                    </p>
+                }
+            }
+            
         @model Shop
         <form asp-action = "CreateShop" asp-controller="Shops" method="post">
             <div class = "form-group row">
                 <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
                     <input asp-for="Name" class="form-control" placeholder="Shop Name (32 characters max)">
-                    <small class="form-text text-danger"><span asp-validation-for="Name"></span>@ViewBag.NoMoney</small>
+                    <small class="form-text text-danger"><span asp-validation-for="Name"></span></small>
                 </div>
             </div>
             <hr>

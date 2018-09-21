@@ -41,7 +41,7 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
             //if i have a shop, go to edit shop, otherwise go to create a shop
-            ViewBag.MyShop = context.Shops.Include(shop => shop.Products).ThenInclude(listed => listed.Product).
+            ViewBag.MyShop = context.Shops.Include(shop => shop.Items).ThenInclude(listed => listed.Item).
             SingleOrDefault(shop => shop.UserId == HttpContext.Session.GetInt32("UserId"));
             ViewBag.NoMoney = TempData["NoMoney"];
             if(ViewBag.MyShop == null){
@@ -65,13 +65,12 @@ namespace SpiritMarket.Controllers
                     context.SaveChanges(); 
                 }
                 else{
-                    TempData["NoMoney"] = "I said shops were easy to set up, not free! Come back once you have 75 SG!";
+                    TempData["NoMoney"] = "Hey! I said shops were easy to set up, not free! Come back once you have 75 SG!";
                 }
                 return RedirectToAction("MyShop");
             }
             else{
-                TempData["NoMoney"] = "Make your shop name shorter, dumdum";
-                return RedirectToAction("MyShop");
+                return View("CreateMyShop");
             }
         }
 
@@ -89,7 +88,7 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Shop = context.Shops.Include(shop => shop.Products).ThenInclude(listed => listed.Product).
+            ViewBag.Shop = context.Shops.Include(shop => shop.Items).ThenInclude(listed => listed.Item).
             SingleOrDefault(shop => shop.UserId == OtherUserId);
             if(ViewBag.Shop == null || ViewBag.Shop.UserId == ViewBag.User.UserId){
                 return RedirectToAction("MyShop");
@@ -108,7 +107,7 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            ListedProduct Item = context.GetOneListedProduct(itemid);
+            ListedItem Item = context.GetOneListedItem(itemid);
             if(Item == null){
                 return RedirectToAction("OtherShop", new{ username = user});
             }
@@ -125,29 +124,29 @@ namespace SpiritMarket.Controllers
 
         [HttpPost]
         [Route("update")]
-        public IActionResult UpdateStock(IDictionary<int, ListedProduct> UpdateProds){
+        public IActionResult UpdateStock(IDictionary<int, ListedItem> UpdateProds){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            foreach(KeyValuePair<int, ListedProduct> Prod in UpdateProds){
-                ListedProduct ExistingProduct = context.GetOneListedProduct(Prod.Key);
-                int AmountDifference = ExistingProduct.Stock - Prod.Value.Stock;
+            foreach(KeyValuePair<int, ListedItem> Prod in UpdateProds){
+                ListedItem ExistingItem = context.GetOneListedItem(Prod.Key);
+                int AmountDifference = ExistingItem.Stock - Prod.Value.Stock;
                 if(AmountDifference > 0){
                     Console.WriteLine("Adding " + AmountDifference + " back to inventory!");
-                    Inventory AddBack = new Inventory();
-                    AddBack.ProductId = ExistingProduct.ProductId;
+                    InventoryItem AddBack = new InventoryItem();
+                    AddBack.ItemId = ExistingItem.ItemId;
                     AddBack.UserId = ViewBag.User.UserId;
                     AddBack.Amount = AmountDifference;
                     context.AddToInventory(AddBack);
                 }
-                if(ExistingProduct.Stock <= 0 || Prod.Value.Stock <= 0){
-                    Console.WriteLine("About to delete this product!");
-                    context.Remove(ExistingProduct);
+                if(ExistingItem.Stock <= 0 || Prod.Value.Stock <= 0){
+                    Console.WriteLine("About to delete this Item!");
+                    context.Remove(ExistingItem);
                     continue;
                 }
-                ExistingProduct.Price = Prod.Value.Price;
-                ExistingProduct.Stock = Prod.Value.Stock;
+                ExistingItem.Price = Prod.Value.Price;
+                ExistingItem.Stock = Prod.Value.Stock;
             }
             context.SaveChanges();
             return RedirectToAction("MyShop");
