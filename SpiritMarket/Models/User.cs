@@ -33,14 +33,16 @@ namespace SpiritMarket.Models{
         public Shop Shop {get; set;}
 
         public List<InventoryItem> Items {get; set;}
+        public List<Abyssimal> Abyssimals {get; set;}
 
         public DateTime Created_At{get; set;}
         public DateTime Updated_At{get; set;}
 
-        public Boolean IsAdmin {get; set;}
+        public bool IsAdmin {get; set;}
 
         public User(){
             Items = new List<InventoryItem>();
+            Abyssimals = new List<Abyssimal>();
             Balance = 100;
             IsAdmin = false;
             Created_At = DateTime.Now;

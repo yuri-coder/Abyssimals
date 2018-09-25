@@ -25,6 +25,10 @@ namespace SpiritMarket.Models{
 
         public List<ListedItem> Shops {get; set;}
         public List<InventoryItem> Users {get; set;}
+        public List<Subtype> Subtypes {get; set;}
+
+        public int MainItemTypeId {get; set;}
+        public MainItemType MainItemType {get; set;}
 
         public DateTime Created_At{get; set;}
         public DateTime Updated_At{get; set;}
@@ -32,6 +36,7 @@ namespace SpiritMarket.Models{
         public Item(){
             Shops = new List<ListedItem>();
             Users = new List<InventoryItem>();
+            Subtypes = new List<Subtype>();
             Created_At = DateTime.Now;
             Updated_At = DateTime.Now;
         }
