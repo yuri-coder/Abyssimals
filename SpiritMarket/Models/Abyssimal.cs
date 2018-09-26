@@ -29,7 +29,7 @@ namespace SpiritMarket.Models{
         public DateTime Created_At{get; set;}
         public DateTime Updated_At{get; set;}
 
-        public List<AbyssimalStatuses> CurrentStatuses {get; set;}
+        public List<AbyssimalStatus> CurrentStatuses {get; set;}
         public List<LearnedAttack> LearnedAttacks {get; set;}
 
         public int UserId {get; set;}
@@ -39,13 +39,13 @@ namespace SpiritMarket.Models{
         public AbyssimalSpecies AbyssimalSpecies {get; set;}
 
         public Abyssimal(){
-            CurrentStatuses = new List<AbyssimalStatuses>();
+            CurrentStatuses = new List<AbyssimalStatus>();
             LearnedAttacks = new List<LearnedAttack>();
             Created_At = DateTime.Now;
             Updated_At = DateTime.Now;
         }
 
-        public Abyssimal(AbyssimalSpecies BaseSpecies) : this(){
+        public void InitializeSpecies(AbyssimalSpecies BaseSpecies){
             Level = 1;
             Health = BaseSpecies.BaseHealth;
             Strength = BaseSpecies.BaseStrength;
@@ -55,11 +55,12 @@ namespace SpiritMarket.Models{
             Speed = BaseSpecies.BaseSpeed;
             MP = BaseSpecies.BaseMP;
             Experience = 0;
+            AbyssimalSpeciesId = BaseSpecies.AbyssimalSpeciesId;
         }
 
-        public Abyssimal(AbyssimalSpecies BaseSpecies, User Owner) : this(BaseSpecies){
+        public void InitializeSpecies(AbyssimalSpecies BaseSpecies, User Owner){
+            InitializeSpecies(BaseSpecies);
             UserId = Owner.UserId;
         }
-
     }
 }

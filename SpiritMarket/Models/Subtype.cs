@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace SpiritMarket.Models{
     public class Subtype{
-        [Key]
-        public int SubtypeId {get; set;}
+        // [Key]
+        // public int SubtypeId {get; set;}
 
         public int ItemId {get; set;}
         public Item Item {get; set;}
