@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace SpiritMarket.Models{
     public class ElementalRequirement{
+        [Key]
+        public int ElementalRequirementId {get; set;}
+
         public int ElementalTypeId {get; set;}
         public ElementalType ElementalType {get; set;}
 

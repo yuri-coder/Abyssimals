@@ -15,6 +15,25 @@ namespace SpiritMarket.Models
         public DbSet<Shop> Shops {get; set;}
         public DbSet<ListedItem> ListedItems{get; set;}
         public DbSet<InventoryItem> InventoryItems{get; set;}
+        public DbSet<Abyssimal> Abyssimals {get; set;}
+        public DbSet<AbyssimalElementalType> AbyssimalElementalTypes {get; set;}
+        public DbSet<AbyssimalGroup> AbyssimalGroups {get; set;}
+        public DbSet<AbyssimalGroupRequirement> AbyssimalGroupRequirements {get; set;}
+        public DbSet<AbyssimalSpecies> AbyssimalSpecies {get; set;}
+        public DbSet<AbyssimalSpeciesGroup> AbyssimalSpeciesGroups {get; set;}
+        public DbSet<AbyssimalStatus> AbyssimalStatuses {get; set;}
+        public DbSet<Attack> Attacks {get; set;}
+        public DbSet<BaseAttackStatus> BaseAttackStatuses {get; set;}
+        public DbSet<ElementalMatchup> ElementalMatchups {get; set;}
+        public DbSet<ElementalRequirement> ElementalRequirements {get; set;}
+        public DbSet<ElementalType> ElementalTypes {get; set;}
+        public DbSet<LearnedAttack> LearnedAttacks {get; set;}
+        public DbSet<LearnedAttackStatus> LearnedAttackStatuses {get; set;}
+        public DbSet<MainItemType> MainItemTypes {get; set;}
+        public DbSet<PotentialAttack> PotentialAttacks {get; set;}
+        public DbSet<Status> Statuses {get; set;}
+        public DbSet<SubItemType> SubItemTypes {get; set;}
+        public DbSet<Subtype> Subtypes {get; set;}
 
         public User GetOneUser(string Username){
             return this.Users.SingleOrDefault(user => user.Username == Username);

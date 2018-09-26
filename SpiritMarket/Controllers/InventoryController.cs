@@ -67,17 +67,17 @@ namespace SpiritMarket.Controllers
             User current = ViewBag.User;
             InventoryItem TestLeaf = new InventoryItem();
             TestLeaf.Amount = 3;
-            TestLeaf.ItemId = 1;
+            TestLeaf.ItemId = 14;
             TestLeaf.UserId = current.UserId;
 
             InventoryItem TestEssence = new InventoryItem();
             TestEssence.Amount = 2;
-            TestEssence.ItemId = 7;
+            TestEssence.ItemId = 15;
             TestEssence.UserId = current.UserId;
 
             InventoryItem TestPetal = new InventoryItem();
             TestPetal.Amount = 5;
-            TestPetal.ItemId = 2;
+            TestPetal.ItemId = 16;
             TestPetal.UserId = current.UserId;
             context.AddToInventory(TestLeaf);
             context.AddToInventory(TestEssence);

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace SpiritMarket.Models{
     public class ElementalType{
         [Key]
@@ -23,18 +24,18 @@ namespace SpiritMarket.Models{
         public List<Attack> AttacksWithThisElementalType {get; set;}
         public List<ElementalRequirement> AttacksRequiringThisElementalType {get; set;}
 
-        [InverseProperty("OriginalType")]
-        public List<ElementalMatchup> AttackingMatchups {get; set;}
+        //[InverseProperty("OriginalElementalType")]
+        //public List<ElementalMatchup> AttackingMatchups {get; set;}
 
-        [InverseProperty("MatchupType")]
-        public List<ElementalMatchup> DefendingMatchups {get; set;}
+        //[InverseProperty("MatchupElementalType")]
+        //public List<ElementalMatchup> DefendingMatchups {get; set;}
 
         public ElementalType(){
             AbyssimalsWithThisElementalType = new List<AbyssimalElementalType>();
             AttacksWithThisElementalType = new List<Attack>();
             AttacksRequiringThisElementalType = new List<ElementalRequirement>();
-            AttackingMatchups = new List<ElementalMatchup>();
-            DefendingMatchups = new List<ElementalMatchup>();
+            //AttackingMatchups = new List<ElementalMatchup>();
+            //DefendingMatchups = new List<ElementalMatchup>();
             Created_At = DateTime.Now;
             Updated_At = DateTime.Now;
         }

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace SpiritMarket.Models{
     public class BaseAttackStatus{
+        [Key]
+        public int BaseAttackStatusId {get; set;}
+
         public int BaseChance {get; set;}
         public DateTime Created_At{get; set;}
         public DateTime Updated_At{get; set;}

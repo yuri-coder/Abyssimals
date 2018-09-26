@@ -37,6 +37,7 @@ namespace SpiritMarket.Models{
             Shops = new List<ListedItem>();
             Users = new List<InventoryItem>();
             Subtypes = new List<Subtype>();
+            MainItemTypeId = 1;
             Created_At = DateTime.Now;
             Updated_At = DateTime.Now;
         }

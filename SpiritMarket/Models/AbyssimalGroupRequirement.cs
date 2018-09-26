@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace SpiritMarket.Models{
     public class AbyssimalGroupRequirement{
+        [Key]
+        public int AbyssimalGroupRequirementId {get; set;}
+
         public int AttackId {get; set;}
         public Attack Attack {get; set;}
 
