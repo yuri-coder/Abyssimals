@@ -35,16 +35,11 @@ namespace SpiritMarket.Controllers
             return View("Home");
         }
 
-        [HttpGet]
-        [Route("new")]
-        public IActionResult NewAdmin(){
-            ViewBag.User = HasAccess();
-            if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
-            }
-            ViewBag.Message = TempData["AdminMessage"];
-            return View();
-        }
+        
+
+        /*
+        Item CRUD
+         */
 
         [HttpGet]
         [Route("item/new")]
@@ -161,6 +156,127 @@ namespace SpiritMarket.Controllers
             }
             Console.WriteLine("IsTradeable is " + p.IsTradeable);
             return View("EditItem");
+        }
+
+
+        /*
+        Main Item Type CRUD
+         */
+
+        [HttpGet]
+        [Route("mainitemtype/edit")]
+        public IActionResult AllMainItemTypes(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.AdminMessage = TempData["AdminMessage"];
+            ViewBag.AllMainItemTypes = context.MainItemTypes.ToList();
+            return View();
+        }
+
+        [HttpGet]
+        [Route("mainitemtype/new")]
+        public IActionResult NewMainItemType(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Route("mainitemtype/new")]
+        public IActionResult CreateMainItemType(MainItemType NewType){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            if(ModelState.IsValid){
+                MainItemType existing = context.GetOneMainItemType(NewType.Name);
+                if(existing != null && existing.MainItemTypeId != NewType.MainItemTypeId){
+                    ViewBag.NameError = "A Main Item Type with that name already exists!";
+                    return View("NewMainItemType");
+                }
+                context.Add(NewType);
+                context.SaveChanges();
+                TempData["AdminMessage"] = $"{NewType.Name} successfully added to the database!";
+                return RedirectToAction("AllMainItemTypes");
+            }
+            return View("NewMainItemType");
+        }
+
+        [HttpGet]
+        [Route("mainitemtype/edit/{mid}")]
+        public IActionResult EditMainItemType(int mid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.MainItemType = context.GetOneMainItemType(mid);
+            if(ViewBag.MainItemType == null){
+                TempData["AdminMessage"] = $"Main Item Type with the requested id {mid} not found!";
+                return RedirectToAction("AllMainItemTypes");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Route("mainitemtype/edit/{mid}")]
+        public IActionResult EditMainItemType(MainItemType ItemType, int mid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            MainItemType original = context.GetOneMainItemType(mid);
+            if(original == null){
+                TempData["AdminMessage"] = $"Main Item Type with the requested id {mid} not found!";
+                return RedirectToAction("AllMainItemTypes");
+            }
+
+            ViewBag.MainItemType = original;
+            if(ModelState.IsValid){
+                MainItemType existing = context.GetOneMainItemType(ItemType.Name);
+                if(existing != null && existing.MainItemTypeId != mid){
+                    ViewBag.NameError = "A Main Item Type with that name already exists!";
+                    return View("EditMainItemType");
+                }
+                original.Name = ItemType.Name;
+                original.Description = ItemType.Description;
+                context.SaveChanges();
+                TempData["AdminMessage"] = $"Main Item Type #{mid} successfully edited!";
+                return RedirectToAction("AllMainItemTypes");
+            }
+            return View();
+        }
+
+        [HttpGet]
+        [Route("mainitemtype/delete/{mid}")]
+        public IActionResult DeleteMainItemType(int mid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            context.DeleteMainItemType(mid);
+            context.SaveChanges();
+            TempData["AdminMessage"] = $"Main Item Type #{mid} successfully deleted! I hope you knew what you were doing!";
+            return RedirectToAction("AllMainItemTypes");
+        }
+
+
+        /*
+        Admin Checking and Editing
+         */
+
+        [HttpGet]
+        [Route("new")]
+        public IActionResult NewAdmin(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.Message = TempData["AdminMessage"];
+            return View();
         }
 
         [HttpPost]

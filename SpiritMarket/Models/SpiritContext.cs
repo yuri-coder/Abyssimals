@@ -35,46 +35,61 @@ namespace SpiritMarket.Models
         public DbSet<SubItemType> SubItemTypes {get; set;}
         public DbSet<Subtype> Subtypes {get; set;}
 
+        /*
+        Users
+         */
         public User GetOneUser(string Username){
             return this.Users.SingleOrDefault(user => user.Username == Username);
         }
 
         public User GetOneUser(int? UserId){
-            if(UserId == null){
-                return null;
-            }
-            return this.Users.SingleOrDefault(user => user.UserId == UserId);
+            return UserId == null ? null : this.Users.SingleOrDefault(user => user.UserId == UserId);
         }
 
-        public Shop GetOneShop(int? UserId){
-            if(UserId == null){
-                return null;
-            }
-            return this.Shops.SingleOrDefault(shop => shop.UserId == UserId);
+
+        /*
+        Main Item Types
+         */
+        public MainItemType GetOneMainItemType(int? MainItemTypeId){
+            return MainItemTypeId == null ? null : this.MainItemTypes.SingleOrDefault(type => type.MainItemTypeId == MainItemTypeId);
         }
 
+        public MainItemType GetOneMainItemType(string Name){
+            return this.MainItemTypes.SingleOrDefault(type => type.Name == Name);
+        }
+
+        public void DeleteMainItemType(int? MainItemTypeId){
+            if(MainItemTypeId != null){
+                this.Remove(this.MainItemTypes.SingleOrDefault(type => type.MainItemTypeId == MainItemTypeId));
+            }
+        }
+
+
+        /*
+        Items
+         */
         public Item GetOneItem(int? ItemId){
-            if(ItemId == null){
-                return null;
-            }
-            return this.Items.SingleOrDefault(Item => Item.ItemId == ItemId);
+            return ItemId == null ? null : this.Items.SingleOrDefault(Item => Item.ItemId == ItemId);
         }
+
         public Item GetOneItem(string ItemName){
             return this.Items.SingleOrDefault(Item => Item.Name == ItemName);
         }
 
+
+        /*
+        Listed Items
+         */
         public ListedItem GetOneListedItem(int? ListedItemId){
-            if(ListedItemId == null){
-                return null;
-            }
-            return this.ListedItems.SingleOrDefault(listed => listed.ListedItemId == ListedItemId);
+            return ListedItemId == null ? null : this.ListedItems.SingleOrDefault(listed => listed.ListedItemId == ListedItemId);
         }
 
+
+        /*
+        Inventory Items
+         */
         public List<InventoryItem> GetUserInventory(int? UserId){
-            if(UserId == null){
-                return null;
-            }
-            return this.InventoryItems.Where(inventory => inventory.UserId == UserId).ToList();
+            return UserId == null ? null : this.InventoryItems.Where(inventory => inventory.UserId == UserId).ToList();
         }
 
         public void AddToInventory(InventoryItem Item){
@@ -100,6 +115,24 @@ namespace SpiritMarket.Models
                 this.Add(Item);
             }
             this.SaveChanges();
+        }
+
+        public bool RemoveItemFromInventory(InventoryItem Item, int Amount){
+            if(Item.Amount < Amount)
+                return false;
+            Item.Amount -= Amount;
+            if(Item.Amount == 0){
+                this.Remove(Item);
+                this.SaveChanges();
+            }
+            return true;
+        }
+
+        /*
+        Shops
+         */
+        public Shop GetOneShop(int? UserId){
+            return UserId == null ? null : this.Shops.SingleOrDefault(shop => shop.UserId == UserId);
         }
 
         public bool AddToShop(InventoryItem Item, Shop UserShop, int Stock, long Price){
@@ -169,15 +202,6 @@ namespace SpiritMarket.Models
             return true;
         }
 
-        public bool RemoveItemFromInventory(InventoryItem Item, int Amount){
-            if(Item.Amount < Amount)
-                return false;
-            Item.Amount -= Amount;
-            if(Item.Amount == 0){
-                this.Remove(Item);
-                this.SaveChanges();
-            }
-            return true;
-        }
+        
     }
 }
