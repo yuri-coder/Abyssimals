@@ -1,34 +1,34 @@
 @{
     Layout = "_HomeLayout";
-    ViewData["Title"] = "Create Main Item Type";
+    ViewData["Title"] = "Create Sub Item Type";
     ViewData["User"] = @ViewBag.User;
 }
 
 <div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 75%;">
     <div class="card-header border-success text-center">
-        <b>Add a Main Item Type!</b>
+        <b>Add a Sub Item Type!</b>
     </div>
     <div class="card-body text-success">
-        <h5 class="card-title">Please fill out this form to add a Main Item Type to the database.</h5>
+        <h5 class="card-title">Please fill out this form to add a Sub Item Type to the database.</h5>
         <p class="card-text">All fields are mandatory.
         </p>
-        @model MainItemType
-        <form asp-action = "CreateMainItemType" asp-controller="Admin" method="post">
+        @model SubItemType
+        <form asp-action = "CreateSubItemType" asp-controller="Admin" method="post">
             <div class = "form-group row">
                 <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Name" class="form-control" placeholder="Main Item Type Name (64 characters max)">
+                    <input asp-for="Name" class="form-control" placeholder="Sub Item Type Name (64 characters max)">
                     <small class="form-text text-danger"><span asp-validation-for="Name"></span>@ViewBag.NameError</small>
                 </div>
                 <label asp-for="Description" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
-                    <textarea asp-for="Description" class="form-control" placeholder="Main Item Type Description (255 characters max)" rows="5"></textarea>
+                    <textarea asp-for="Description" class="form-control" placeholder="Sub Item Type Description (255 characters max)" rows="5"></textarea>
                     <small class="form-text text-danger"><span asp-validation-for="Description"></span></small>
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-success float-right">Create Main Item Type!</button>
+            <button type="submit" class="btn btn-success float-right">Create Sub Item Type!</button>
         </form>
-        <a asp-action="AllMainItemTypes" asp-controller="Admin"><button class="btn btn-info">Back</button></a>
+        <a asp-action="AllSubItemTypes" asp-controller="Admin"><button class="btn btn-info">Back</button></a>
     </div>
 </div>

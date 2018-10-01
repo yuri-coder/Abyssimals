@@ -22,6 +22,7 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" /> -->
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    @RenderSection("Styles", required: false);
 </head>
 <body>
     <div class="container">
@@ -50,7 +51,10 @@
             </li>
             @{
                 if(((User) @ViewData["User"]).IsAdmin){
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Admin" asp-action="AdminHome"><h5>Admin Home</h5></a>
+                    </li>
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <h5 class="d-inline">Admin Actions</h5>
                         </a>
@@ -65,7 +69,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" asp-controller="Admin" asp-action="AllMainItemTypes">Edit Main Item Type</a>
                         </div>
-                    </li>
+                    </li> -->
                 }
             }
             </ul>

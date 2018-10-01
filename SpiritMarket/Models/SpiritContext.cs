@@ -64,6 +64,23 @@ namespace SpiritMarket.Models
             }
         }
 
+        /*
+        Sub Item Types
+         */
+         public SubItemType GetOneSubItemType(int? SubItemTypeId){
+            return SubItemTypeId == null ? null : this.SubItemTypes.SingleOrDefault(type => type.SubItemTypeId == SubItemTypeId);
+        }
+
+        public SubItemType GetOneSubItemType(string Name){
+            return this.SubItemTypes.SingleOrDefault(type => type.Name == Name);
+        }
+
+        public void DeleteSubItemType(int? SubItemTypeId){
+            if(SubItemTypeId != null){
+                this.Remove(this.SubItemTypes.SingleOrDefault(type => type.SubItemTypeId == SubItemTypeId));
+            }
+        }
+
 
         /*
         Items

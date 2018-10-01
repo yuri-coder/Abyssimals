@@ -1,0 +1,11 @@
+.card-row{
+    min-width: 100%; 
+    display:flex;
+}
+
+.card{
+    max-width: 20%; 
+    min-width: 20%; 
+    min-height:25vmin; 
+    display:inline-block;
+}

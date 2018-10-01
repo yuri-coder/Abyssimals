@@ -1,0 +1,50 @@
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Edit Sub Item Type";
+    ViewData["User"] = @ViewBag.User;
+}
+
+<div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 75%;">
+    <div class="card-header border-success text-center">
+        <b>Editing @ViewBag.SubItemType.Name</b>
+    </div>
+    <div class="card-body text-success">
+        <h5 class="card-title">Please fill out this form to edit this sub item type in the database.</h5>
+        <p class="card-text">All fields are mandatory.
+        </p>
+        @model SubItemType
+        <form asp-action = "EditSubItemType" asp-controller="Admin" asp-route-pid=@ViewBag.SubItemType.SubItemTypeId method="post"  id="updateitemtype">
+            <div class = "form-group row">
+                <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
+                <div class="col-sm-8">
+                    <input asp-for="Name" class="form-control" value=@ViewBag.SubItemType.Name>
+                    <small class="form-text text-danger"><span asp-validation-for="Name"></span>@ViewBag.NameError</small>
+                </div>
+                <label asp-for="Description" class="col-sm-4 col-form-label text-center text-muted"></label>
+                <div class="col-sm-8">
+                    <p id="hideme" style="display:none;">@ViewBag.SubItemType.Description</p>
+                    <textarea asp-for="Description" class="form-control" rows="5" id="populate"></textarea>
+                    <small class="form-text text-danger"><span asp-validation-for="Description"></span></small>
+                </div>
+            </div>
+            <hr>
+            <div class="float-right">
+                <button type="submit" class="btn btn-success">Update Sub Item Type!</button>
+            </div>
+        </form>
+        <a asp-action="AllSubItemTypes" asp-controller="Admin"><button class="btn btn-info">Back</button></a>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+    $(function(){
+        var prepopulate = $("#hideme").text();
+        var tradeable = $("#hidemetoo").text();
+        $("#hideme").remove();
+        $("#hidemetoo").remove();
+        $("textarea#populate").val(prepopulate);
+        $("#IsTradeable").prop("checked", tradeable);
+    });
+    </script>
+}

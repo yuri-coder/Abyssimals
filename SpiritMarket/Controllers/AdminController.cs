@@ -32,7 +32,7 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Success = TempData["AdminMessage"];
-            return View("Home");
+            return View();
         }
 
         
@@ -261,6 +261,109 @@ namespace SpiritMarket.Controllers
             context.SaveChanges();
             TempData["AdminMessage"] = $"Main Item Type #{mid} successfully deleted! I hope you knew what you were doing!";
             return RedirectToAction("AllMainItemTypes");
+        }
+
+        /*
+        Sub Item Type CRUD
+         */
+        [HttpGet]
+        [Route("subitemtype/edit")]
+        public IActionResult AllSubItemTypes(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.AdminMessage = TempData["AdminMessage"];
+            ViewBag.AllSubItemTypes = context.SubItemTypes.ToList();
+            return View();
+        }
+
+        [HttpGet]
+        [Route("subitemtype/new")]
+        public IActionResult NewSubItemType(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Route("subitemtype/new")]
+        public IActionResult CreateSubItemType(SubItemType NewType){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            if(ModelState.IsValid){
+                SubItemType existing = context.GetOneSubItemType(NewType.Name);
+                if(existing != null && existing.SubItemTypeId != NewType.SubItemTypeId){
+                    ViewBag.NameError = "A Sub Item Type with that name already exists!";
+                    return View("NewSubItemType");
+                }
+                context.Add(NewType);
+                context.SaveChanges();
+                TempData["AdminMessage"] = $"{NewType.Name} successfully added to the database!";
+                return RedirectToAction("AllSubItemTypes");
+            }
+            return View("NewSubItemType");
+        }
+
+        [HttpGet]
+        [Route("subitemtype/edit/{mid}")]
+        public IActionResult EditSubItemType(int mid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.SubItemType = context.GetOneSubItemType(mid);
+            if(ViewBag.SubItemType == null){
+                TempData["AdminMessage"] = $"Sub Item Type with the requested id {mid} not found!";
+                return RedirectToAction("AllSubItemTypes");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Route("subitemtype/edit/{mid}")]
+        public IActionResult EditSubItemType(SubItemType ItemType, int mid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            SubItemType original = context.GetOneSubItemType(mid);
+            if(original == null){
+                TempData["AdminMessage"] = $"Sub Item Type with the requested id {mid} not found!";
+                return RedirectToAction("AllSubItemTypes");
+            }
+
+            ViewBag.SubItemType = original;
+            if(ModelState.IsValid){
+                SubItemType existing = context.GetOneSubItemType(ItemType.Name);
+                if(existing != null && existing.SubItemTypeId != mid){
+                    ViewBag.NameError = "A Sub Item Type with that name already exists!";
+                    return View("EditSubItemType");
+                }
+                original.Name = ItemType.Name;
+                original.Description = ItemType.Description;
+                context.SaveChanges();
+                TempData["AdminMessage"] = $"Sub Item Type #{mid} successfully edited!";
+                return RedirectToAction("AllSubItemTypes");
+            }
+            return View();
+        }
+
+        [HttpGet]
+        [Route("subitemtype/delete/{mid}")]
+        public IActionResult DeleteSubItemType(int mid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            context.DeleteSubItemType(mid);
+            context.SaveChanges();
+            TempData["AdminMessage"] = $"Sub Item Type #{mid} successfully deleted! I hope you knew what you were doing!";
+            return RedirectToAction("AllSubItemTypes");
         }
 
 
