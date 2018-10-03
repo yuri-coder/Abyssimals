@@ -48,12 +48,25 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
+            ViewBag.MainItemTypes = context.MainItemTypes.ToList();
+            ViewBag.SubItemTypes = context.SubItemTypes.ToList();
             return View();
         }
 
         [HttpPost]
         [Route("item/new")]
         public IActionResult CreateItem(Item p){
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine("Entering Create Item");
+            Console.WriteLine(HttpContext.Request.Form["MainItemType"]);
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
@@ -82,6 +95,8 @@ namespace SpiritMarket.Controllers
                     return View("NewItem");
                 }
             }
+            ViewBag.MainItemTypes = context.MainItemTypes.ToList();
+            ViewBag.SubItemTypes = context.SubItemTypes.ToList();
             return View("NewItem");
         }
 
@@ -93,7 +108,7 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
-            ViewBag.AllItems = context.Items.ToList();
+            ViewBag.AllItems = context.AllItemsAndTypes();
             return View();
         }
 
@@ -104,7 +119,7 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Item = context.GetOneItem(pid);
+            ViewBag.Item = context.GetOneItemWithTypes(pid);
             if(ViewBag.Item == null){
                 TempData["AdminMessage"] = $"Item with the requested id {pid} not found!";
                 return RedirectToAction("AdminHome");
@@ -119,7 +134,7 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            Item original = context.GetOneItem(pid);
+            Item original = context.GetOneItemWithTypes(pid);
             if(original == null){
                 TempData["AdminMessage"] = $"Item with the requested id {pid} not found!";
                 return RedirectToAction("AdminHome");
@@ -127,7 +142,7 @@ namespace SpiritMarket.Controllers
 
             ViewBag.Item = original;
             if(ModelState.IsValid){
-                Item existing = context.GetOneItem(p.Name);
+                Item existing = context.GetOneItemWithTypes(p.Name);
                 if(existing != null && existing.ItemId != pid){
                     ViewBag.NameError = "An item with that name already exists!";
                     return View("EditItem");

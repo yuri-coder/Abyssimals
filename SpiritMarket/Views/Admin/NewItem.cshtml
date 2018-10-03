@@ -36,6 +36,17 @@
                     <small class="form-text text-danger"><span asp-validation-for="IsTradeable"></span></small>
                 </div>
             </div>
+
+            <div class="form-group row">
+                <label for="MainItemType" class="col-sm-4 col-form-label text-center text-muted">Select a Main Item Type</label>
+                <select class="form-control col-sm-8" id="MainItemType" name="MainItemType">
+                    @{
+                        foreach(MainItemType itemType in @ViewBag.MainItemTypes){
+                            <option value="@itemType.MainItemTypeId">@itemType.Name</option>
+                        }
+                    }
+                </select>
+            </div>
             <hr>
             <button type="submit" class="btn btn-success float-right">Create Item!</button>
         </form>

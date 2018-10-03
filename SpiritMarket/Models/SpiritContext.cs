@@ -93,6 +93,21 @@ namespace SpiritMarket.Models
             return this.Items.SingleOrDefault(Item => Item.Name == ItemName);
         }
 
+        public Item GetOneItemWithTypes(string ItemName){
+            return this.Items.Include(item => item.MainItemType).Include(item => item.Subtypes).
+                    ThenInclude(subtype => subtype.SubItemType).SingleOrDefault(Item => Item.Name == ItemName);
+        }
+
+        public Item GetOneItemWithTypes(int? ItemId){
+            return ItemId == null ? null : this.Items.Include(item => item.MainItemType).Include(item => item.Subtypes).
+                    ThenInclude(subtype => subtype.SubItemType).SingleOrDefault(Item => Item.ItemId == ItemId);
+        }
+
+        public List<Item> AllItemsAndTypes(){
+            return this.Items.Include(item => item.MainItemType).Include(item => item.Subtypes).
+                    ThenInclude(subtype => subtype.SubItemType).ToList();
+        }
+
 
         /*
         Listed Items
