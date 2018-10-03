@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using FileIO = System.IO.File;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -56,18 +58,6 @@ namespace SpiritMarket.Controllers
         [HttpPost]
         [Route("item/new")]
         public IActionResult CreateItem(Item p){
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine("Entering Create Item");
-            Console.WriteLine(HttpContext.Request.Form["MainItemType"]);
-            Console.WriteLine(HttpContext.Request.Form["SubItemType"]);
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
@@ -110,77 +100,6 @@ namespace SpiritMarket.Controllers
             ViewBag.SubItemTypes = context.SubItemTypes.ToList();
             return View("NewItem");
         }
-
-        #region ItemValidations
-        public bool ValidateUniqueItemName(string name, out string errorMessage){
-            errorMessage = "";
-            if(context.GetOneItem(name) != null){
-                errorMessage = "An item with that name already exists!";
-                return false;
-            }
-            return true;
-        }
-
-        public bool ValidateImageLocation(string path, out string errorMessage){
-            errorMessage = "";
-            var webRoot = _env.WebRootPath;
-            var file = System.IO.Path.Combine(webRoot + "\\images", path);
-            if(!System.IO.File.Exists(file)){
-                errorMessage = "The file couldn't be found. Please check the spelling and file extension!";
-                return false;
-            }
-            return true;
-        }
-
-        public bool ValidateMainItemType(string typeId, out string errorMessage){
-            errorMessage = "";
-            int providedMainItemTypeId = -1;
-            if(typeId == ""){
-                errorMessage = "Please specify a Main Item Type for the item.";
-                return false;
-            }
-            else{
-                if (!Int32.TryParse(typeId, out providedMainItemTypeId))
-                {
-                    errorMessage = "The given Main Item Type Id couldn't be parsed.";
-                    return false;
-                }
-                if(providedMainItemTypeId != -1){
-                    MainItemType existingMainType = context.GetOneMainItemType(providedMainItemTypeId);
-                    if(existingMainType == null){
-                        errorMessage = "No Main Item Type with the specified Id could be found.";
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public bool ValidateSubItemTypes(List<string> stringIds, List<int> intIds, out string errorMessage){
-            errorMessage = "";
-            if(stringIds.Count == 0){
-                errorMessage = "Please specify at least one Sub Item Type for the item.";
-                return false;
-            }
-            else{
-                foreach(string stringId in stringIds){
-                    int intId = -1;
-                    if (!Int32.TryParse(stringId, out intId))
-                    {
-                        errorMessage = "At least one of the given Sub Item Type Ids couldn't be parsed.";
-                        return false;
-                    }
-                    SubItemType existingSubType = context.GetOneSubItemType(intId);
-                    if(existingSubType == null){
-                        errorMessage = "At least one of the given Sub Item Type Ids didn't match any Sub Item Type in the database.";
-                        return false;
-                    }
-                    intIds.Add(intId);
-                }
-            }
-            return true;
-        }
-        #endregion
 
         [HttpGet]
         [Route("item/edit")]
@@ -253,6 +172,19 @@ namespace SpiritMarket.Controllers
             }
             Console.WriteLine("IsTradeable is " + p.IsTradeable);
             return View("EditItem");
+        }
+
+        [HttpGet]
+        [Route("item/delete/{pid}")]
+        public IActionResult DeleteItem(int pid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            context.DeleteItem(pid);
+            context.SaveChanges();
+            TempData["AdminMessage"] = $"Main Item Type #{pid} successfully deleted! I hope you knew what you were doing!";
+            return RedirectToAction("ItemList");
         }
 
 
@@ -513,5 +445,76 @@ namespace SpiritMarket.Controllers
             }
             return u;
         }
+
+        #region ItemValidations
+        public bool ValidateUniqueItemName(string name, out string errorMessage){
+            errorMessage = "";
+            if(context.GetOneItem(name) != null){
+                errorMessage = "An item with that name already exists!";
+                return false;
+            }
+            return true;
+        }
+
+        public bool ValidateImageLocation(string path, out string errorMessage){
+            errorMessage = "";
+            var webRoot = _env.WebRootPath;
+            var file = Path.Combine(webRoot + "\\images", path);
+            if(!FileIO.Exists(file)){
+                errorMessage = "The file couldn't be found. Please check the spelling and file extension!";
+                return false;
+            }
+            return true;
+        }
+
+        public bool ValidateMainItemType(string typeId, out string errorMessage){
+            errorMessage = "";
+            int providedMainItemTypeId = -1;
+            if(typeId == ""){
+                errorMessage = "Please specify a Main Item Type for the item.";
+                return false;
+            }
+            else{
+                if (!Int32.TryParse(typeId, out providedMainItemTypeId))
+                {
+                    errorMessage = "The given Main Item Type Id couldn't be parsed.";
+                    return false;
+                }
+                if(providedMainItemTypeId != -1){
+                    MainItemType existingMainType = context.GetOneMainItemType(providedMainItemTypeId);
+                    if(existingMainType == null){
+                        errorMessage = "No Main Item Type with the specified Id could be found.";
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool ValidateSubItemTypes(List<string> stringIds, List<int> intIds, out string errorMessage){
+            errorMessage = "";
+            if(stringIds.Count == 0){
+                errorMessage = "Please specify at least one Sub Item Type for the item.";
+                return false;
+            }
+            else{
+                foreach(string stringId in stringIds){
+                    int intId = -1;
+                    if (!Int32.TryParse(stringId, out intId))
+                    {
+                        errorMessage = "At least one of the given Sub Item Type Ids couldn't be parsed.";
+                        return false;
+                    }
+                    SubItemType existingSubType = context.GetOneSubItemType(intId);
+                    if(existingSubType == null){
+                        errorMessage = "At least one of the given Sub Item Type Ids didn't match any Sub Item Type in the database.";
+                        return false;
+                    }
+                    intIds.Add(intId);
+                }
+            }
+            return true;
+        }
+        #endregion
     }
 }

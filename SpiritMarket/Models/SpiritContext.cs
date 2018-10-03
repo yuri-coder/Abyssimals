@@ -108,6 +108,13 @@ namespace SpiritMarket.Models
                     ThenInclude(subtype => subtype.SubItemType).ToList();
         }
 
+        public void DeleteItem(int? ItemId){
+            if(ItemId != null){
+                this.Items.Remove(this.Items.Include(item => item.MainItemType).Include(item => item.Subtypes).
+                    ThenInclude(subtype => subtype.SubItemType).SingleOrDefault(Item => Item.ItemId == ItemId));
+            }
+        }
+
 
         /*
         Listed Items
