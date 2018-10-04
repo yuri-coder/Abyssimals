@@ -37,12 +37,7 @@ namespace SpiritMarket.Controllers
             return View();
         }
 
-        
-
-        /*
-        Item CRUD
-         */
-
+        #region Item CRUD
         [HttpGet]
         [Route("item/new")]
         public IActionResult NewItem(){
@@ -92,7 +87,7 @@ namespace SpiritMarket.Controllers
                     }
                     context.SaveChanges();
                     TempData["AdminMessage"] = $"{p.Name} successfully added to the database!";
-                    return RedirectToAction("AdminHome");
+                    return RedirectToAction("ItemList");
                 }
             }
             ViewBag.MainItemTypes = context.MainItemTypes.ToList();
@@ -221,12 +216,9 @@ namespace SpiritMarket.Controllers
             TempData["AdminMessage"] = $"Main Item Type #{pid} successfully deleted! I hope you knew what you were doing!";
             return RedirectToAction("ItemList");
         }
+        #endregion
 
-
-        /*
-        Main Item Type CRUD
-         */
-
+        #region MainItemType CRUD
         [HttpGet]
         [Route("mainitemtype/edit")]
         public IActionResult AllMainItemTypes(){
@@ -326,10 +318,9 @@ namespace SpiritMarket.Controllers
             TempData["AdminMessage"] = $"Main Item Type #{mid} successfully deleted! I hope you knew what you were doing!";
             return RedirectToAction("AllMainItemTypes");
         }
+        #endregion
 
-        /*
-        Sub Item Type CRUD
-         */
+        #region SubItemType CRUD 
         [HttpGet]
         [Route("subitemtype/edit")]
         public IActionResult AllSubItemTypes(){
@@ -429,12 +420,73 @@ namespace SpiritMarket.Controllers
             TempData["AdminMessage"] = $"Sub Item Type #{mid} successfully deleted! I hope you knew what you were doing!";
             return RedirectToAction("AllSubItemTypes");
         }
+        #endregion
 
+        #region Elemental Type CRUD
+        [HttpGet]
+        [Route("elementaltypes/edit")]
+        public IActionResult AllElementalTypes(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.AdminMessage = TempData["AdminMessage"];
+            ViewBag.AllElementalTypes = context.ElementalTypes.ToList();
+            return View();
+        }
 
-        /*
-        Admin Checking and Editing
-         */
+        [HttpGet]
+        [Route("elementaltypes/new")]
+        public IActionResult NewElementalType(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
 
+        [HttpPost]
+        [Route("elementaltypes/new")]
+        public IActionResult CreateElementalType(ElementalType element){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("AllElementalTypes");
+        }
+
+        [HttpGet]
+        [Route("elementaltypes/edit/{eid}")]
+        public IActionResult EditElementalType(int eid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Route("elementaltypes/edit/{eid}")]
+        public IActionResult EditElementalType(ElementalType element, int eid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("AllElementalTypes");
+        }
+
+        [HttpGet]
+        [Route("elementaltypes/delete/{eid}")]
+        public IActionResult DeleteElementalType(int eid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("AllElementalTypes");
+        }
+        #endregion
+
+        #region Admin Checking and Editing
         [HttpGet]
         [Route("new")]
         public IActionResult NewAdmin(){
@@ -480,6 +532,7 @@ namespace SpiritMarket.Controllers
             }
             return u;
         }
+        #endregion
 
         #region ItemValidations
         public bool ValidateUniqueItemName(string name, out string errorMessage){

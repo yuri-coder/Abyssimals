@@ -10,6 +10,7 @@ namespace SpiritMarket.Models
         // base() calls the parent class' constructor passing the "options" parameter along
         public SpiritContext(DbContextOptions<SpiritContext> options) : base(options) { }
 
+        #region DbSets
         public DbSet<User> Users {get; set;}
         public DbSet<Item> Items {get; set;}
         public DbSet<Shop> Shops {get; set;}
@@ -24,7 +25,6 @@ namespace SpiritMarket.Models
         public DbSet<AbyssimalStatus> AbyssimalStatuses {get; set;}
         public DbSet<Attack> Attacks {get; set;}
         public DbSet<BaseAttackStatus> BaseAttackStatuses {get; set;}
-        public DbSet<ElementalMatchup> ElementalMatchups {get; set;}
         public DbSet<ElementalRequirement> ElementalRequirements {get; set;}
         public DbSet<ElementalType> ElementalTypes {get; set;}
         public DbSet<LearnedAttack> LearnedAttacks {get; set;}
@@ -34,10 +34,9 @@ namespace SpiritMarket.Models
         public DbSet<Status> Statuses {get; set;}
         public DbSet<SubItemType> SubItemTypes {get; set;}
         public DbSet<Subtype> Subtypes {get; set;}
+        #endregion
 
-        /*
-        Users
-         */
+        #region Users
         public User GetOneUser(string Username){
             return this.Users.SingleOrDefault(user => user.Username == Username);
         }
@@ -45,11 +44,9 @@ namespace SpiritMarket.Models
         public User GetOneUser(int? UserId){
             return UserId == null ? null : this.Users.SingleOrDefault(user => user.UserId == UserId);
         }
+        #endregion
 
-
-        /*
-        Main Item Types
-         */
+        #region Main Item Types
         public MainItemType GetOneMainItemType(int? MainItemTypeId){
             return MainItemTypeId == null ? null : this.MainItemTypes.SingleOrDefault(type => type.MainItemTypeId == MainItemTypeId);
         }
@@ -63,11 +60,10 @@ namespace SpiritMarket.Models
                 this.Remove(this.MainItemTypes.SingleOrDefault(type => type.MainItemTypeId == MainItemTypeId));
             }
         }
+        #endregion
 
-        /*
-        Sub Item Types
-         */
-         public SubItemType GetOneSubItemType(int? SubItemTypeId){
+        #region Sub Item Types
+        public SubItemType GetOneSubItemType(int? SubItemTypeId){
             return SubItemTypeId == null ? null : this.SubItemTypes.SingleOrDefault(type => type.SubItemTypeId == SubItemTypeId);
         }
 
@@ -80,11 +76,9 @@ namespace SpiritMarket.Models
                 this.Remove(this.SubItemTypes.SingleOrDefault(type => type.SubItemTypeId == SubItemTypeId));
             }
         }
+        #endregion
 
-
-        /*
-        Items
-         */
+        #region Items
         public Item GetOneItem(int? ItemId){
             return ItemId == null ? null : this.Items.SingleOrDefault(Item => Item.ItemId == ItemId);
         }
@@ -114,19 +108,15 @@ namespace SpiritMarket.Models
                     ThenInclude(subtype => subtype.SubItemType).SingleOrDefault(Item => Item.ItemId == ItemId));
             }
         }
+        #endregion
 
-
-        /*
-        Listed Items
-         */
+        #region Listed Items
         public ListedItem GetOneListedItem(int? ListedItemId){
             return ListedItemId == null ? null : this.ListedItems.SingleOrDefault(listed => listed.ListedItemId == ListedItemId);
         }
+        #endregion
 
-
-        /*
-        Inventory Items
-         */
+        #region Inventory Items
         public List<InventoryItem> GetUserInventory(int? UserId){
             return UserId == null ? null : this.InventoryItems.Where(inventory => inventory.UserId == UserId).ToList();
         }
@@ -166,10 +156,9 @@ namespace SpiritMarket.Models
             }
             return true;
         }
+        #endregion
 
-        /*
-        Shops
-         */
+        #region Shops
         public Shop GetOneShop(int? UserId){
             return UserId == null ? null : this.Shops.SingleOrDefault(shop => shop.UserId == UserId);
         }
@@ -240,7 +229,7 @@ namespace SpiritMarket.Models
             
             return true;
         }
-
+        #endregion
         
     }
 }

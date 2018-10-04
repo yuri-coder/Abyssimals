@@ -1,0 +1,41 @@
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "All Elemental Types";
+    ViewData["User"] = @ViewBag.User;
+}
+
+<div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 100%;">
+    <div class="card-header border-success text-center">
+        <h4><b>Select an Elemental Type to edit!</b></h4>
+    </div>
+    <div class="card-body text-success">
+        <h4 class="card-title">Please select an Elemental type to edit.</h4>
+        <p class="card-text text-danger">@ViewBag.AdminMessage
+        </p>
+       <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col" style="width: 15%;"><h5>Elemental Type ID</h5></th>
+                <th scope="col"><h5>Name</h5></th>
+                <th scope="col" style="width: 35%;"><h5>Description</h5></th>
+                <th scope="col"><h5>Actions</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach(ElementalType ElementalType in ViewBag.AllElementalTypes){
+                        <tr>
+                            <th scope="row" style="vertical-align: middle;"><h5>@ElementalType.ElementalTypeId</h5></th>
+                            <td style="vertical-align: middle;"><h5>@ElementalType.Name</h5></td>
+                            <td style="vertical-align: middle;"><p>@ElementalType.Description</p></td>
+                            <td style="vertical-align: middle;">
+                                <a asp-controller="Admin" asp-action="EditElementalType" asp-route-mid=@ElementalType.ElementalTypeId><button class="btn btn-success"><b>Edit</b></button></a>
+                                <a asp-controller="Admin" asp-action="DeleteElementalType" asp-route-mid=@ElementalType.ElementalTypeId><button class="btn btn-danger"><b>Delete</b></button></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
