@@ -62,7 +62,6 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-
             if(ModelState.IsValid){
                 bool StillValid = true;
                 string nameError;
@@ -109,7 +108,17 @@ namespace SpiritMarket.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
-            ViewBag.AllItems = context.AllItemsAndTypes();
+            List<Item> AllItems = context.AllItemsWithTypes();
+            Dictionary<int, string> ItemSubtypes = new Dictionary<int, string>();
+            foreach(Item item in AllItems){
+                string subtypeString = string.Join(", ", (from subitemtype in context.SubItemTypes 
+                                       join subtype in context.Subtypes on subitemtype.SubItemTypeId equals subtype.SubItemTypeId
+                                       where subtype.ItemId == item.ItemId select subitemtype.Name).ToList());
+                subtypeString = subtypeString == "" ? "None" : subtypeString;
+                ItemSubtypes[item.ItemId] = subtypeString;
+            }
+            ViewBag.AllItems = AllItems;
+            ViewBag.ItemSubtypes = ItemSubtypes;
             return View();
         }
 
@@ -120,11 +129,16 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.Item = context.GetOneItemWithTypes(pid);
-            if(ViewBag.Item == null){
+            Item item = context.GetOneItemWithTypes(pid);
+            if(item == null){
                 TempData["AdminMessage"] = $"Item with the requested id {pid} not found!";
                 return RedirectToAction("AdminHome");
             }
+            List<Subtype> subtypes = item.Subtypes;
+            ViewBag.Item = item;
+            ViewBag.MainItemTypes = context.MainItemTypes.ToList();
+            ViewBag.SubItemTypes = context.SubItemTypes.ToList();
+            ViewBag.AssignedSubItemTypes = subtypes; 
             return View();
         }
 
@@ -143,34 +157,55 @@ namespace SpiritMarket.Controllers
 
             ViewBag.Item = original;
             if(ModelState.IsValid){
+                bool StillValid = true;
                 Item existing = context.GetOneItemWithTypes(p.Name);
                 if(existing != null && existing.ItemId != pid){
                     ViewBag.NameError = "An item with that name already exists!";
-                    return View("EditItem");
+                    StillValid = false;
                 }
-                var webRoot = _env.WebRootPath;
-                var file = System.IO.Path.Combine(webRoot + "\\images", p.Image);
-                Console.WriteLine("File path: " + file);
-                if(System.IO.File.Exists(file)){
-                    Console.WriteLine("File exists!");
-                    p.IsTradeable = p.IsTradeable ?? false;
-                    Console.WriteLine("P Tradeable is " + p.IsTradeable);
-                    //p.Image = file;
+
+                string imageError;
+                StillValid = ValidateImageLocation(p.Image, out imageError) ? StillValid : false;
+                ViewBag.ImageError = imageError;
+
+                string mainItemTypeError;
+                StillValid = ValidateMainItemType(HttpContext.Request.Form["MainItemType"], out mainItemTypeError) ? StillValid : false;
+                ViewBag.MainItemTypeError = mainItemTypeError;
+
+                List<int> SubItemTypeIds = new List<int>();
+                string subItemTypeError;
+                StillValid = ValidateSubItemTypes(HttpContext.Request.Form["SubItemType"].ToList(), SubItemTypeIds, out subItemTypeError) ? StillValid : false;
+                ViewBag.SubItemTypeError = subItemTypeError;
+                if(StillValid){
                     original.Name = p.Name;
                     original.Description = p.Description;
                     original.Image = p.Image;
-                    original.IsTradeable = p.IsTradeable;
+                    original.IsTradeable = p.IsTradeable ?? false;
+                    original.MainItemTypeId = Int32.Parse(HttpContext.Request.Form["MainItemType"]);
+                    List<Subtype> ExistingSubtypes = context.Subtypes.Where(subtype => subtype.ItemId == original.ItemId).ToList();
+                    foreach(Subtype existingSubtype in ExistingSubtypes){
+                        if(SubItemTypeIds.Contains(existingSubtype.SubItemTypeId)){
+                            SubItemTypeIds.Remove(existingSubtype.SubItemTypeId); //If the existing SubItemTypeId is there, there's no need to add it
+                        }
+                        else{
+                            context.Subtypes.Remove(existingSubtype); //If it's not there, then that means it is being deleted
+                        }
+                    }
+                    foreach(int subId in SubItemTypeIds){
+                        Subtype s = new Subtype();
+                        s.SubItemTypeId = subId;
+                        s.ItemId = original.ItemId;
+                        context.Add(s);
+                    }
                     context.SaveChanges();
-                    TempData["AdminMessage"] = $"Item #{pid} successfully edited!";
+                    TempData["AdminMessage"] = $"Item {p.Name} successfully edited!";
                     return RedirectToAction("ItemList");
                 }
-                else{
-                    Console.WriteLine("File didn't exist");
-                    ViewBag.ImageError = "The file couldn't be found. Please check the spelling and file extension!";
-                    return View("EditItem");
-                }
             }
-            Console.WriteLine("IsTradeable is " + p.IsTradeable);
+            List<Subtype> subtypes = original.Subtypes;
+            ViewBag.MainItemTypes = context.MainItemTypes.ToList();
+            ViewBag.SubItemTypes = context.SubItemTypes.ToList();
+            ViewBag.AssignedSubItemTypes = subtypes;
             return View("EditItem");
         }
 

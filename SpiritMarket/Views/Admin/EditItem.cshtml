@@ -41,6 +41,50 @@
                     <br><small class="form-text text-danger"><span asp-validation-for="IsTradeable"></span></small>
                 </div>
             </div>
+
+            <div class="form-group row">
+                <label for="MainItemType" class="col-sm-4 col-form-label text-center text-muted">Select a Main Item Type</label>
+                <select class="form-control col-sm-8" id="MainItemType" name="MainItemType">
+                    @{
+                        foreach(MainItemType itemType in @ViewBag.MainItemTypes){
+                            if(itemType.MainItemTypeId == @ViewBag.Item.MainItemTypeId){
+                                <option value="@itemType.MainItemTypeId" selected>@itemType.Name</option>
+                            }
+                            else{
+                                <option value="@itemType.MainItemTypeId">@itemType.Name</option>
+                            }
+                        }
+                    }
+                </select>
+                <small class="form-text text-danger">@ViewBag.MainItemTypeError</small>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label text-center text-muted">Select Sub Item Type(s)</label>
+                <div class="form-check form-check-inline">
+                    @{
+                        foreach(SubItemType subItemType in @ViewBag.SubItemTypes){
+                            var uid = "subitem" + @subItemType.SubItemTypeId;
+                            var hasSubtype = false;
+                            foreach(Subtype subtype in @ViewBag.AssignedSubItemTypes){
+                                if(subtype.SubItemTypeId == subItemType.SubItemTypeId){
+                                    hasSubtype = true;
+                                    break;
+                                }
+                            }
+                            if(hasSubtype){
+                                <input class="form-check-input ml-3" type="checkbox" name="SubItemType" id="@uid" value="@subItemType.SubItemTypeId" checked>
+                            }
+                            else{
+                                <input class="form-check-input ml-3" type="checkbox" name="SubItemType" id="@uid" value="@subItemType.SubItemTypeId"> 
+                            }
+                            <label class="form-check-label" for="@uid">
+                            @subItemType.Name
+                            </label>
+                        }
+                    }
+                </div>
+            </div>
+            <small class="form-text text-danger">@ViewBag.SubItemTypeError</small>
             <hr>
             <div class="float-right">
                 <button type="submit" class="btn btn-success">Update Item!</button>

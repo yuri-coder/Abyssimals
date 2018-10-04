@@ -103,7 +103,7 @@ namespace SpiritMarket.Models
                     ThenInclude(subtype => subtype.SubItemType).SingleOrDefault(Item => Item.ItemId == ItemId);
         }
 
-        public List<Item> AllItemsAndTypes(){
+        public List<Item> AllItemsWithTypes(){
             return this.Items.Include(item => item.MainItemType).Include(item => item.Subtypes).
                     ThenInclude(subtype => subtype.SubItemType).ToList();
         }
