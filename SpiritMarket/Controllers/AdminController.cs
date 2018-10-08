@@ -467,6 +467,7 @@ namespace SpiritMarket.Controllers
                 if(StillValid){
                     element.ShortName = element.ShortName.ToUpper();
                     context.Add(element);
+                    UpdateMatchups();
                     context.SaveChanges();
                     TempData["AdminMessage"] = $"{element.Name} successfully added to the database!";
                     return RedirectToAction("AllElementalTypes");  
@@ -539,6 +540,20 @@ namespace SpiritMarket.Controllers
             context.SaveChanges();
             TempData["AdminMessage"] = $"Elemental Type #{eid} successfully deleted! I hope you knew what you were doing!";
             return RedirectToAction("AllElementalTypes");
+        }
+        #endregion
+
+        #region Type Matchups Editing 
+        [HttpGet]
+        [Route("matchups/edit")]
+        public IActionResult EditTypeChart(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            List<ElementalType> AllElementalTypes = context.GetElementalTypesAndMatchups();
+            
+            return View();
         }
         #endregion
 
@@ -659,6 +674,40 @@ namespace SpiritMarket.Controllers
             }
             return true;
         }
+        #endregion
+
+        #region Special Development Routes & Methods
+        [HttpGet]
+        [Route("typechart/update")]
+        public IActionResult UpdateTypeChart(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            UpdateMatchups();
+            return RedirectToAction("AdminHome");
+        }
+
+        public void UpdateMatchups(){
+            List<ElementalType> AllElementalTypes = context.ElementalTypes.ToList();
+            foreach(ElementalType AttackingType in AllElementalTypes){
+                if(AttackingType.Matchups == null){
+                    AttackingType.Matchups = new List<Matchup>();
+                }
+                foreach(ElementalType DefendingType in AllElementalTypes){
+                    Matchup matchup = context.GetOneMatchup(AttackingType, DefendingType);
+                    if(matchup == null){
+                        matchup = new Matchup();
+                        matchup.EffectivenessId = 1;
+                        matchup.AttackingElementalTypeId = AttackingType.ElementalTypeId;
+                        matchup.DefendingElementalTypeId = DefendingType.ElementalTypeId;
+                        context.Add(matchup);
+                    }
+                }
+            }
+            context.SaveChanges();
+        }
+
         #endregion
     }
 }

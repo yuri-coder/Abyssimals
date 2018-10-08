@@ -35,6 +35,8 @@ namespace SpiritMarket.Models
         public DbSet<Status> Statuses {get; set;}
         public DbSet<SubItemType> SubItemTypes {get; set;}
         public DbSet<Subtype> Subtypes {get; set;}
+        public DbSet<Matchup> Matchups {get; set;}
+        public DbSet<Effectiveness> Effectivenesses {get; set;}
         #endregion
 
         #region Users
@@ -247,8 +249,23 @@ namespace SpiritMarket.Models
 
         public void DeleteElementalType(int? ElementalTypeId){
             if(ElementalTypeId != null){
-                this.Remove(this.ElementalTypes.SingleOrDefault(type => type.ElementalTypeId == ElementalTypeId));
+                this.Remove(this.ElementalTypes.Include(type => type.AttacksWithThisElementalType).Include(type => type.Matchups)
+                .SingleOrDefault(type => type.ElementalTypeId == ElementalTypeId));
+                this.Matchups.Where(m => m.DefendingElementalTypeId == ElementalTypeId).ToList().
+                              ForEach(m => this.Matchups.Remove(m));
             }
+        }
+
+        public List<ElementalType> GetElementalTypesAndMatchups(){
+            return this.ElementalTypes.Include(e => e.Matchups).ThenInclude(m => m.Effectiveness).ToList();
+        }
+        #endregion
+
+        #region Matchups
+        public Matchup GetOneMatchup(ElementalType AttackingType, ElementalType DefendingType){
+            return this.Matchups.Include(m => m.Effectiveness).
+                                SingleOrDefault(m => m.AttackingElementalTypeId == AttackingType.ElementalTypeId &&
+                                                m.DefendingElementalTypeId == DefendingType.ElementalTypeId);
         }
         #endregion
     }

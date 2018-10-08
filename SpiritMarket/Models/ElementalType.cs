@@ -28,6 +28,7 @@ namespace SpiritMarket.Models{
         public List<AbyssimalElementalType> AbyssimalsWithThisElementalType {get; set;}
         public List<Attack> AttacksWithThisElementalType {get; set;}
         public List<ElementalRequirement> AttacksRequiringThisElementalType {get; set;}
+        public List<Matchup> Matchups {get; set;}
 
         //[InverseProperty("OriginalElementalType")]
         //public List<ElementalMatchup> AttackingMatchups {get; set;}
@@ -39,6 +40,7 @@ namespace SpiritMarket.Models{
             AbyssimalsWithThisElementalType = new List<AbyssimalElementalType>();
             AttacksWithThisElementalType = new List<Attack>();
             AttacksRequiringThisElementalType = new List<ElementalRequirement>();
+            Matchups = new List<Matchup>();
             //AttackingMatchups = new List<ElementalMatchup>();
             //DefendingMatchups = new List<ElementalMatchup>();
             Created_At = DateTime.Now;
