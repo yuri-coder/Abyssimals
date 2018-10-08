@@ -452,7 +452,27 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("AllElementalTypes");
+            if(ModelState.IsValid){
+                bool StillValid = true;
+                ElementalType existingName = context.GetOneElementalType(element.Name);
+                if(existingName != null && existingName.ElementalTypeId != element.ElementalTypeId){
+                    ViewBag.NameError = "An Elemental Type with that name already exists!";
+                    StillValid = false;
+                }
+                ElementalType existingShortName = context.GetOneElementalTypeByShortName(element.ShortName);
+                if(existingShortName != null && existingShortName.ElementalTypeId != element.ElementalTypeId){
+                    ViewBag.ShortNameError = "An Elemental Type with that short name already exists!";
+                    StillValid = false;
+                }
+                if(StillValid){
+                    element.ShortName = element.ShortName.ToUpper();
+                    context.Add(element);
+                    context.SaveChanges();
+                    TempData["AdminMessage"] = $"{element.Name} successfully added to the database!";
+                    return RedirectToAction("AllElementalTypes");  
+                }
+            }
+            return View("NewElementalType");
         }
 
         [HttpGet]
@@ -461,6 +481,11 @@ namespace SpiritMarket.Controllers
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
+            }
+            ViewBag.ElementalType = context.GetOneElementalType(eid);
+            if(ViewBag.ElementalType == null){
+                TempData["AdminMessage"] = $"Elemental Item Type with the requested id {eid} not found!";
+                return RedirectToAction("AllElementalTypes");
             }
             return View();
         }
@@ -472,7 +497,35 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("AllElementalTypes");
+            ElementalType original = context.GetOneElementalType(eid);
+            if(original == null){
+                TempData["AdminMessage"] = $"Elemental Type with the requested id {eid} not found!";
+                return RedirectToAction("AllElementalTypes");
+            }
+
+            ViewBag.ElementalType = original;
+            if(ModelState.IsValid){
+                bool StillValid = true;
+                ElementalType existingName = context.GetOneElementalType(element.Name);
+                if(existingName != null && existingName.ElementalTypeId != eid){
+                    ViewBag.NameError = "An Elemental Type with that name already exists!";
+                    StillValid = false;
+                }
+                ElementalType existingShortName = context.GetOneElementalTypeByShortName(element.ShortName);
+                if(existingShortName != null && existingShortName.ElementalTypeId != eid){
+                    ViewBag.ShortNameError = "An Elemental Type with that short name already exists!";
+                    StillValid = false;
+                }
+                if(StillValid){
+                    original.Name = element.Name;
+                    original.Description = element.Description;
+                    original.ShortName = element.ShortName.ToUpper();
+                    context.SaveChanges();
+                    TempData["AdminMessage"] = $"Elemental Type #{eid} successfully edited!";
+                    return RedirectToAction("AllElementalTypes");
+                }
+            }
+            return View("EditElementalType");
         }
 
         [HttpGet]
@@ -482,6 +535,9 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
+            context.DeleteElementalType(eid);
+            context.SaveChanges();
+            TempData["AdminMessage"] = $"Elemental Type #{eid} successfully deleted! I hope you knew what you were doing!";
             return RedirectToAction("AllElementalTypes");
         }
         #endregion

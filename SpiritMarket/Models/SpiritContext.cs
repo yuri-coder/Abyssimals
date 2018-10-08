@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
- 
+using System;
+
 namespace SpiritMarket.Models
 {
     public class SpiritContext : DbContext
@@ -84,12 +85,12 @@ namespace SpiritMarket.Models
         }
 
         public Item GetOneItem(string ItemName){
-            return this.Items.SingleOrDefault(Item => Item.Name == ItemName);
+            return this.Items.SingleOrDefault(Item => Item.Name.Equals(ItemName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public Item GetOneItemWithTypes(string ItemName){
             return this.Items.Include(item => item.MainItemType).Include(item => item.Subtypes).
-                    ThenInclude(subtype => subtype.SubItemType).SingleOrDefault(Item => Item.Name == ItemName);
+                    ThenInclude(subtype => subtype.SubItemType).SingleOrDefault(Item => Item.Name.Equals(ItemName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public Item GetOneItemWithTypes(int? ItemId){
@@ -231,5 +232,24 @@ namespace SpiritMarket.Models
         }
         #endregion
         
+        #region Elemental Types
+        public ElementalType GetOneElementalType(string Name){
+            return this.ElementalTypes.SingleOrDefault(e => e.Name.Equals(Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public ElementalType GetOneElementalType(int? ElementalTypeId){
+            return ElementalTypeId == null ? null : this.ElementalTypes.SingleOrDefault(e => e.ElementalTypeId == ElementalTypeId);
+        }
+
+        public ElementalType GetOneElementalTypeByShortName(string ShortName){
+            return this.ElementalTypes.SingleOrDefault(e => e.ShortName.Equals(ShortName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public void DeleteElementalType(int? ElementalTypeId){
+            if(ElementalTypeId != null){
+                this.Remove(this.ElementalTypes.SingleOrDefault(type => type.ElementalTypeId == ElementalTypeId));
+            }
+        }
+        #endregion
     }
 }

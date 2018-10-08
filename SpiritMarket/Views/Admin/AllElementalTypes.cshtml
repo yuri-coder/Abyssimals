@@ -3,7 +3,6 @@
     ViewData["Title"] = "All Elemental Types";
     ViewData["User"] = @ViewBag.User;
 }
-
 <div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 100%;">
     <div class="card-header border-success text-center">
         <h4><b>Select an Elemental Type to edit!</b></h4>
@@ -26,11 +25,11 @@
                     foreach(ElementalType ElementalType in ViewBag.AllElementalTypes){
                         <tr>
                             <th scope="row" style="vertical-align: middle;"><h5>@ElementalType.ElementalTypeId</h5></th>
-                            <td style="vertical-align: middle;"><h5>@ElementalType.Name</h5></td>
+                            <td style="vertical-align: middle;"><h5>@ElementalType.Name (@ElementalType.ShortName)</h5></td>
                             <td style="vertical-align: middle;"><p>@ElementalType.Description</p></td>
                             <td style="vertical-align: middle;">
-                                <a asp-controller="Admin" asp-action="EditElementalType" asp-route-mid=@ElementalType.ElementalTypeId><button class="btn btn-success"><b>Edit</b></button></a>
-                                <a asp-controller="Admin" asp-action="DeleteElementalType" asp-route-mid=@ElementalType.ElementalTypeId><button class="btn btn-danger"><b>Delete</b></button></a>
+                                <a asp-controller="Admin" asp-action="EditElementalType" asp-route-eid=@ElementalType.ElementalTypeId><button class="btn btn-success"><b>Edit</b></button></a>
+                                <a asp-controller="Admin" asp-action="DeleteElementalType" asp-route-eid=@ElementalType.ElementalTypeId><button class="btn btn-danger"><b>Delete</b></button></a>
                             </td>
                         </tr>
                     }
