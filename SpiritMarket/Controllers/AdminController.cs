@@ -467,7 +467,7 @@ namespace SpiritMarket.Controllers
                 if(StillValid){
                     element.ShortName = element.ShortName.ToUpper();
                     context.Add(element);
-                    UpdateMatchups();
+                    UpdateMatchups(); //not sure why this doesn't execute - async issue?
                     context.SaveChanges();
                     TempData["AdminMessage"] = $"{element.Name} successfully added to the database!";
                     return RedirectToAction("AllElementalTypes");  
@@ -551,9 +551,31 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            List<ElementalType> AllElementalTypes = context.GetElementalTypesAndMatchups();
-            
+            List<ElementalType> AllElementalTypes = context.AllElementalTypesAndMatchups();
+            List<Matchup> AllMatchups = context.AllMatchups();
+            Dictionary<Tuple<int, int>, double> Effectivenesses = new Dictionary<Tuple<int, int>, double>();
+            foreach(Matchup matchup in AllMatchups){
+                Effectivenesses.Add(new Tuple<int, int>(matchup.AttackingElementalTypeId, matchup.DefendingElementalTypeId), 
+                                    matchup.Effectiveness.Multiplier);
+            }
+            // Dictionary<int, Dictionary<int, double>> Effectivenesses = new Dictionary<int, Dictionary<int, double>>();
+            // foreach(Matchup matchup in AllMatchups){
+            //     Dictionary<int, double> defMatchup;
+            //     Effectivenesses.TryGetValue(matchup.AttackingElementalTypeId, out defMatchup);
+            //     if(defMatchup == null){
+            //         Effectivenesses[matchup.AttackingElementalTypeId] = new Dictionary<int, double>();
+            //     }
+            //     Effectivenesses[matchup.AttackingElementalTypeId][matchup.DefendingElementalTypeId] = matchup.Effectiveness.Multiplier;
+            // }
+            ViewBag.AllElementalTypes = AllElementalTypes;
+            ViewBag.Matchups = Effectivenesses;
             return View();
+        }
+
+        [HttpPost]
+        [Route("matchups/edit")]
+        public IActionResult EditTypeChart(IDictionary<int, Matchup> Matchups){
+            return RedirectToAction("AdminHome");
         }
         #endregion
 

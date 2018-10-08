@@ -256,7 +256,7 @@ namespace SpiritMarket.Models
             }
         }
 
-        public List<ElementalType> GetElementalTypesAndMatchups(){
+        public List<ElementalType> AllElementalTypesAndMatchups(){
             return this.ElementalTypes.Include(e => e.Matchups).ThenInclude(m => m.Effectiveness).ToList();
         }
         #endregion
@@ -266,6 +266,10 @@ namespace SpiritMarket.Models
             return this.Matchups.Include(m => m.Effectiveness).
                                 SingleOrDefault(m => m.AttackingElementalTypeId == AttackingType.ElementalTypeId &&
                                                 m.DefendingElementalTypeId == DefendingType.ElementalTypeId);
+        }
+
+        public List<Matchup> AllMatchups(){
+            return this.Matchups.Include(m => m.Effectiveness).ToList();
         }
         #endregion
     }
