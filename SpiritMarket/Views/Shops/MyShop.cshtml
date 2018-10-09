@@ -6,6 +6,7 @@
 }
 
 <h1>@ViewBag.MyShop.Name</h1>
+<h5 class="text-danger">@ViewBag.ErrorMessage</h5>
 @model IDictionary<int, ListedItem>
 <form action="update" method="POST">
     <table class="table table-hover">

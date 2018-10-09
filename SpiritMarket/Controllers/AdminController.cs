@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using SpiritMarket.Models;
+using SpiritMarket.Combat;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 
 namespace SpiritMarket.Controllers
 {
@@ -559,13 +561,32 @@ namespace SpiritMarket.Controllers
             }
             ViewBag.AllElementalTypes = AllElementalTypes;
             ViewBag.Matchups = Effectivenesses;
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+            ViewBag.SuccessMessage = TempData["SuccessMessage"];
             return View();
         }
 
         [HttpPost]
         [Route("matchups/edit")]
         public IActionResult EditTypeChart(IDictionary<int, Matchup> Matchups){
-            return RedirectToAction("AdminHome");
+            ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            foreach(KeyValuePair<int, Matchup> matchup in Matchups){
+                Matchup ExistingMatchup = context.GetOneMatchup(matchup.Key);
+                if(ExistingMatchup == null){
+                    TempData["ErrorMessage"] = "One of the types couldn't be found anymore - perhaps it was deleted?";
+                    return RedirectToAction("EditTypeChart");
+                }
+                ExistingMatchup.EffectivenessId = matchup.Value.EffectivenessId;
+            }
+            context.SaveChanges();
+            TempData["SuccessMessage"] = "Type chart successfully updated!";
+            TypeChart NewTypeChart = new TypeChart(Matchups, context);
+            string filelocation = Path.Combine(_env.WebRootPath + "\\jsondata\\typechart.json");
+            FileIO.WriteAllText(filelocation, JsonConvert.SerializeObject(NewTypeChart));
+            return RedirectToAction("EditTypeChart");
         }
         #endregion
 

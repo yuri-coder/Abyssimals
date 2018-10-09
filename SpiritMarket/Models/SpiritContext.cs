@@ -268,6 +268,10 @@ namespace SpiritMarket.Models
                                                 m.DefendingElementalTypeId == DefendingType.ElementalTypeId);
         }
 
+        public Matchup GetOneMatchup(int? MatchupId){
+            return MatchupId == null ? null : this.Matchups.SingleOrDefault(m => m.MatchupId == MatchupId);
+        }
+
         public List<Matchup> AllMatchups(){
             return this.Matchups.Include(m => m.Effectiveness).ToList();
         }

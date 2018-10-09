@@ -12,44 +12,53 @@
         <h5 class="card-title">Click on each box to change the type effectiveness.</h5>
         <p class="card-text">Attacking types are on the left, defending types are on the top.
         </p>
+        <h5>@ViewBag.ErrorMessage</h5>
+        <h5>@ViewBag.SuccessMessage</h5>
+    </div>
+
+    <div class="card-body text-center">
+        @model IDictionary<int, Matchup>
+        <form action="edit" method="POST">
+        <div class="matchup-container">
+            @{
+                <div class="matchup" style="padding-top: 0px;"><p>&rarr; Def<br>&darr; Atk</p></div>
+                int i = 0;
+                for(int atk = -1; atk < @ViewBag.AllElementalTypes.Count; atk++){
+                    if(atk != -1){
+                        <div class="matchup"><p>@ViewBag.AllElementalTypes[atk].ShortName</p></div>
+                    }
+                    for(int def = 0; def < @ViewBag.AllElementalTypes.Count; def++){
+                        if(atk == -1){
+                            <div class="matchup"><p>@ViewBag.AllElementalTypes[def].ShortName</p></div>
+                        }
+                        else{
+                            int atkId = @ViewBag.AllElementalTypes[atk].ElementalTypeId;
+                            int defId = @ViewBag.AllElementalTypes[def].ElementalTypeId;
+                        <div class="matchup effectiveness" style="padding-top: 4px;">
+                                <input type="hidden" name="@("Matchups[" + @i + "].Key")" 
+                                                    value=@ViewBag.Matchups[new Tuple<int, int>(atkId, defId)].MatchupId>
+                                <input class="multiplier-input" type="hidden" name="@("Matchups[" + @i + "].Value.EffectivenessId")" 
+                                                    value=@ViewBag.Matchups[new Tuple<int, int>(atkId, defId)].EffectivenessId>
+                                
+                                <p>ー</p>
+                            </div> 
+                            i++;
+                        }
+                        
+                    }
+                    <br>
+                }
+            }
+        </div>
+        <div class="float-right">
+            <button type="submit" class="btn btn-success">Update Type Chart!</button>
+        </div>
+        </form>
+        <a asp-action="AdminHome" asp-controller="Admin"><button class="btn btn-info float-left">Back</button></a>
     </div>
 </div>
 <p id="hideme" style="display:none;">@ViewBag.AllElementalTypes.Count</p>
-@model IDictionary<int, Matchup>
-<form action="matchups/edit" method="post">
-<div class="matchup-container">
-    @{
-        <div class="matchup" style="padding-top: 0px;"><p>&rarr; Def<br>&darr; Atk</p></div>
-        int i = 0;
-        for(int atk = -1; atk < @ViewBag.AllElementalTypes.Count; atk++){
-            if(atk != -1){
-                <div class="matchup"><p>@ViewBag.AllElementalTypes[atk].ShortName</p></div>
-            }
-            for(int def = 0; def < @ViewBag.AllElementalTypes.Count; def++){
-                if(atk == -1){
-                    <div class="matchup"><p>@ViewBag.AllElementalTypes[def].ShortName</p></div>
-                }
-                else{
-                    int atkId = @ViewBag.AllElementalTypes[atk].ElementalTypeId;
-                    int defId = @ViewBag.AllElementalTypes[def].ElementalTypeId;
-                   <div class="matchup effectiveness" style="padding-top: 4px;">
-                        <input type="hidden" name="@("Matchups[" + @i + "].Key")" 
-                                             value=@ViewBag.Matchups[new Tuple<int, int>(atkId, defId)].MatchupId>
-                        <input class="multiplier-input" type="hidden" name="@("Matchups[" + @i + "].Value.EffectivenessId")" 
-                                             value=@ViewBag.Matchups[new Tuple<int, int>(atkId, defId)].EffectivenessId>
-                        
-                        <p>ー
-                        </p>
-                    </div> 
-                    i++;
-                }
-                
-            }
-            <br>
-        }
-    }
-</div>
-</form>
+
 
 
 @section Scripts{

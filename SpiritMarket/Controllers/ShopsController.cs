@@ -40,7 +40,7 @@ namespace SpiritMarket.Controllers
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home");
             }
-            //if i have a shop, go to edit shop, otherwise go to create a shop
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
             ViewBag.MyShop = context.Shops.Include(shop => shop.Items).ThenInclude(listed => listed.Item).
             SingleOrDefault(shop => shop.UserId == HttpContext.Session.GetInt32("UserId"));
             ViewBag.NoMoney = TempData["NoMoney"];
@@ -131,6 +131,11 @@ namespace SpiritMarket.Controllers
             }
             foreach(KeyValuePair<int, ListedItem> Prod in UpdateProds){
                 ListedItem ExistingItem = context.GetOneListedItem(Prod.Key);
+                if(ExistingItem == null){
+                    TempData["ErrorMessage"] = "Oops! It looks like one of those items doesn't exist anymore... " + 
+                                                "maybe it was bought or already removed?";
+                    return RedirectToAction("MyShop");
+                }
                 int AmountDifference = ExistingItem.Stock - Prod.Value.Stock;
                 if(AmountDifference > 0){
                     Console.WriteLine("Adding " + AmountDifference + " back to inventory!");
