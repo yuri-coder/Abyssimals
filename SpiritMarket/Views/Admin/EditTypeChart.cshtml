@@ -16,9 +16,40 @@
 </div>
 <p id="hideme" style="display:none;">@ViewBag.AllElementalTypes.Count</p>
 @model IDictionary<int, Matchup>
+<form action="matchups/edit" method="post">
 <div class="matchup-container">
-    
+    @{
+        <div class="matchup" style="padding-top: 0px;"><p>&rarr; Def<br>&darr; Atk</p></div>
+        int i = 0;
+        for(int atk = -1; atk < @ViewBag.AllElementalTypes.Count; atk++){
+            if(atk != -1){
+                <div class="matchup"><p>@ViewBag.AllElementalTypes[atk].ShortName</p></div>
+            }
+            for(int def = 0; def < @ViewBag.AllElementalTypes.Count; def++){
+                if(atk == -1){
+                    <div class="matchup"><p>@ViewBag.AllElementalTypes[def].ShortName</p></div>
+                }
+                else{
+                    int atkId = @ViewBag.AllElementalTypes[atk].ElementalTypeId;
+                    int defId = @ViewBag.AllElementalTypes[def].ElementalTypeId;
+                   <div class="matchup effectiveness" style="padding-top: 4px;">
+                        <input type="hidden" name="@("Matchups[" + @i + "].Key")" 
+                                             value=@ViewBag.Matchups[new Tuple<int, int>(atkId, defId)].MatchupId>
+                        <input class="multiplier-input" type="hidden" name="@("Matchups[" + @i + "].Value.EffectivenessId")" 
+                                             value=@ViewBag.Matchups[new Tuple<int, int>(atkId, defId)].EffectivenessId>
+                        
+                        <p>ー
+                        </p>
+                    </div> 
+                    i++;
+                }
+                
+            }
+            <br>
+        }
+    }
 </div>
+</form>
 
 
 @section Scripts{
@@ -29,8 +60,54 @@
         generateTypeChart();
 
         function generateTypeChart(){
-            $(".matchup-container").html("<div class='matchup'><p>PLN</p></div>");
+            $(".effectiveness").each(function(){
+                switch($(this).find(".multiplier-input").val()){
+                case "1":
+                    $(this).find("p").text("ー");
+                    $(this).css("background-color", "#f4f2f2");
+                    break;
+                case "2":
+                    $(this).find("p").text("△");
+                    $(this).css("background-color", "#f7ef99");
+                    break;
+                case "3":
+                    $(this).find("p").text("〇");
+                    $(this).css("background-color", "#a5f799");
+                    break;
+                case "4": 
+                    $(this).find("p").text("✖");
+                    $(this).css("background-color", "#f79999");
+                    break;
+                default: 
+                }
+            });
         }
+
+        $("body").on("click", ".effectiveness", function(){
+            switch($(this).find(".multiplier-input").val()){
+                case "1":
+                    $(this).find(".multiplier-input").val("2");
+                    $(this).find("p").text("△");
+                    $(this).css("background-color", "#f7ef99");
+                    break;
+                case "2":
+                    $(this).find(".multiplier-input").val("3");
+                    $(this).find("p").text("〇");
+                    $(this).css("background-color", "#a5f799");
+                    break;
+                case "3":
+                    $(this).find(".multiplier-input").val("4");
+                    $(this).find("p").text("✖");
+                    $(this).css("background-color", "#f79999");
+                    break;
+                case "4": 
+                    $(this).find(".multiplier-input").val("1");
+                    $(this).find("p").text("ー");
+                    $(this).css("background-color", "#f4f2f2");
+                    break;
+                default: 
+            }
+        });
 
     });
     </script>

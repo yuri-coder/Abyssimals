@@ -553,20 +553,10 @@ namespace SpiritMarket.Controllers
             }
             List<ElementalType> AllElementalTypes = context.AllElementalTypesAndMatchups();
             List<Matchup> AllMatchups = context.AllMatchups();
-            Dictionary<Tuple<int, int>, double> Effectivenesses = new Dictionary<Tuple<int, int>, double>();
+            Dictionary<Tuple<int, int>, Matchup> Effectivenesses = new Dictionary<Tuple<int, int>, Matchup>();
             foreach(Matchup matchup in AllMatchups){
-                Effectivenesses.Add(new Tuple<int, int>(matchup.AttackingElementalTypeId, matchup.DefendingElementalTypeId), 
-                                    matchup.Effectiveness.Multiplier);
+                Effectivenesses.Add(new Tuple<int, int>(matchup.AttackingElementalTypeId, matchup.DefendingElementalTypeId), matchup);
             }
-            // Dictionary<int, Dictionary<int, double>> Effectivenesses = new Dictionary<int, Dictionary<int, double>>();
-            // foreach(Matchup matchup in AllMatchups){
-            //     Dictionary<int, double> defMatchup;
-            //     Effectivenesses.TryGetValue(matchup.AttackingElementalTypeId, out defMatchup);
-            //     if(defMatchup == null){
-            //         Effectivenesses[matchup.AttackingElementalTypeId] = new Dictionary<int, double>();
-            //     }
-            //     Effectivenesses[matchup.AttackingElementalTypeId][matchup.DefendingElementalTypeId] = matchup.Effectiveness.Multiplier;
-            // }
             ViewBag.AllElementalTypes = AllElementalTypes;
             ViewBag.Matchups = Effectivenesses;
             return View();
