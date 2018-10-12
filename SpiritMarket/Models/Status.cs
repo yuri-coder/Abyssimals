@@ -15,6 +15,11 @@ namespace SpiritMarket.Models{
         [MaxLength(255)]
         public string Description {get; set;}
 
+        [Required]
+        [MinLength(3)]
+        [MaxLength(3)]
+        public string ShortName {get; set;}
+
         public DateTime Created_At{get; set;}
         public DateTime Updated_At{get; set;}
 

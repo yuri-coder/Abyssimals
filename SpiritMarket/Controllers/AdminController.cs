@@ -424,6 +424,127 @@ namespace SpiritMarket.Controllers
         }
         #endregion
 
+        #region Status CRUD
+        [HttpGet]
+        [Route("status/edit")]
+        public IActionResult AllStatuses(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.AdminMessage = TempData["AdminMessage"];
+            ViewBag.AllStatuses = context.Statuses.ToList();
+            return View();
+        }
+
+        [HttpGet]
+        [Route("status/new")]
+        public IActionResult NewStatus(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Route("status/new")]
+        public IActionResult CreateStatus(Status status){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            if(ModelState.IsValid){
+                bool StillValid = true;
+                Status existingName = context.GetOneStatus(status.Name);
+                if(existingName != null && existingName.StatusId != status.StatusId){
+                    ViewBag.NameError = "A Status with that name already exists!";
+                    StillValid = false;
+                }
+                Status existingShortName = context.GetOneStatusByShortName(status.ShortName);
+                if(existingShortName != null && existingShortName.StatusId != status.StatusId){
+                    ViewBag.ShortNameError = "A Status with that short name already exists!";
+                    StillValid = false;
+                }
+                if(StillValid){
+                    status.ShortName = status.ShortName.ToUpper();
+                    context.Add(status);
+                    context.SaveChanges();
+                    TempData["AdminMessage"] = $"{status.Name} successfully added to the database!";
+                    return RedirectToAction("AllStatuses");  
+                }
+            }
+            return View("NewStatus");
+        }
+
+        [HttpGet]
+        [Route("status/edit/{sid}")]
+        public IActionResult EditStatus(int sid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.Status = context.GetOneStatus(sid);
+            if(ViewBag.Status == null){
+                TempData["AdminMessage"] = $"Status with the requested id {sid} not found!";
+                return RedirectToAction("AllStatuses");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Route("status/edit/{sid}")]
+        public IActionResult EditStatus(Status status, int sid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            Status original = context.GetOneStatus(sid);
+            if(original == null){
+                TempData["AdminMessage"] = $"Status with the requested id {sid} not found!";
+                return RedirectToAction("AllStatuses");
+            }
+
+            ViewBag.Status = original;
+            if(ModelState.IsValid){
+                bool StillValid = true;
+                Status existingName = context.GetOneStatus(status.Name);
+                if(existingName != null && existingName.StatusId != sid){
+                    ViewBag.NameError = "A Status with that name already exists!";
+                    StillValid = false;
+                }
+                Status existingShortName = context.GetOneStatusByShortName(status.ShortName);
+                if(existingShortName != null && existingShortName.StatusId != sid){
+                    ViewBag.ShortNameError = "A Status with that short name already exists!";
+                    StillValid = false;
+                }
+                if(StillValid){
+                    original.Name = status.Name;
+                    original.Description = status.Description;
+                    original.ShortName = status.ShortName.ToUpper();
+                    context.SaveChanges();
+                    TempData["AdminMessage"] = $"Status #{sid} successfully edited!";
+                    return RedirectToAction("AllStatuses");
+                }
+            }
+            return View("EditStatus");
+        }
+
+        [HttpGet]
+        [Route("status/delete/{sid}")]
+        public IActionResult DeleteStatus(int sid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            context.DeleteStatus(sid);
+            context.SaveChanges();
+            TempData["AdminMessage"] = $"Status #{sid} successfully deleted! I hope you knew what you were doing!";
+            return RedirectToAction("AllStatuses");
+
+        }
+        #endregion
+
         #region Elemental Type CRUD
         [HttpGet]
         [Route("elementaltypes/edit")]

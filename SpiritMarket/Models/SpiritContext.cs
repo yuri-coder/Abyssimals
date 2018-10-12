@@ -276,5 +276,32 @@ namespace SpiritMarket.Models
             return this.Matchups.Include(m => m.Effectiveness).ToList();
         }
         #endregion
+
+        #region Statuses
+        public Status GetOneStatus(int? StatusId){
+            return StatusId == null ? null : this.Statuses.SingleOrDefault(s => s.StatusId == StatusId);
+        }
+        
+        public Status GetOneStatus(string Name){
+            return this.Statuses.SingleOrDefault(s => s.Name.Equals(Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public Status GetOneStatusByShortName(string ShortName){
+            return this.Statuses.SingleOrDefault(s => s.ShortName.Equals(ShortName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public void DeleteStatus(int? StatusId){
+            if(StatusId != null){
+                Status FullStatus = GetOneStatusFull(StatusId);
+                this.Remove(FullStatus);
+            }
+        }
+
+        public Status GetOneStatusFull(int? StatusId){
+            return StatusId == null ? null : 
+                    this.Statuses.Include(s => s.BaseAttacksWithThisStatus).Include(s => s.AbyssimalsWithThisStatus).
+                                Include(s => s.LearnedAttacksWithThisStatus).SingleOrDefault(s => s.StatusId == StatusId);
+        }
+        #endregion
     }
 }
