@@ -303,5 +303,41 @@ namespace SpiritMarket.Models
                                 Include(s => s.LearnedAttacksWithThisStatus).SingleOrDefault(s => s.StatusId == StatusId);
         }
         #endregion
+    
+        #region Attacks
+        #endregion
+
+        #region Abyssimal Groups
+        public AbyssimalGroup GetOneAbyssimalGroup(int? AbyssimalGroupId){
+            return AbyssimalGroupId == null ? null : this.AbyssimalGroups.SingleOrDefault(a => a.AbyssimalGroupId == AbyssimalGroupId);
+        }
+
+        public AbyssimalGroup GetOneAbyssimalGroup(string Name){
+            return this.AbyssimalGroups.SingleOrDefault(a => a.Name.Equals(Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public AbyssimalGroup GetOneAbyssimalGroupFull(int? AbyssimalGroupId){
+             return AbyssimalGroupId == null ? null : 
+             this.AbyssimalGroups.Include(a => a.AttacksRequiringThisGroup).ThenInclude(agr => agr.Attack)
+                                 .Include(a => a.SpeciesWithThisGroup).ThenInclude(asg => asg.AbyssimalSpecies)
+                                 .SingleOrDefault(a => a.AbyssimalGroupId == AbyssimalGroupId);
+        }
+
+        public List<AbyssimalGroup> GetAllAbyssimalGroupsFull(){
+            return this.AbyssimalGroups.Include(a => a.AttacksRequiringThisGroup).ThenInclude(agr => agr.Attack)
+                                       .Include(a => a.SpeciesWithThisGroup).ThenInclude(asg => asg.AbyssimalSpecies)
+                                       .ToList();
+        }
+
+        public void DeleteAbyssimalGroup(int? AbyssimalGroupId){
+            if(AbyssimalGroupId != null){
+                AbyssimalGroup FullAbyssimalGroup = GetOneAbyssimalGroupFull(AbyssimalGroupId);
+                this.Remove(FullAbyssimalGroup);
+            }
+        }
+        #endregion
+
+        #region Abyssimal Species
+        #endregion
     }
 }

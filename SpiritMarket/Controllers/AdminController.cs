@@ -424,6 +424,66 @@ namespace SpiritMarket.Controllers
         }
         #endregion
 
+        #region Abyssimal Group CRUD
+        [HttpGet]
+        [Route("abyssimalgroup/edit")]
+        public IActionResult AllAbyssimalGroups(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.Success = TempData["SuccessMessage"];
+            ViewBag.Error = TempData["ErrorMessage"];
+            ViewBag.AllAbyssimalGroups = context.GetAllAbyssimalGroupsFull();
+            return View();
+        }
+
+        [HttpGet]
+        [Route("abyssimalgroup/new")]
+        public IActionResult NewAbyssimalGroup(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+        
+        [HttpGet]
+        [Route("abyssimalgroup/edit/{gid}")]
+        public IActionResult EditAbyssimalGroup(int gid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Route("abyssimalgroup/edit/{gid}")]
+        public IActionResult EditAbyssimalGroup(AbyssimalGroup group, int gid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("AllAbyssimalGroups");
+        }
+
+        [HttpGet]
+        [Route("abyssimalgroup/delete/{gid}")]
+        public IActionResult DeleteAbyssimalGroup(int gid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("AllAbyssimalGroups");
+        }
+
+
+        #endregion
+
+        #region Abyssimal Species CRUD
+        #endregion
+
         #region Status CRUD
         [HttpGet]
         [Route("status/edit")]
@@ -664,6 +724,12 @@ namespace SpiritMarket.Controllers
             TempData["AdminMessage"] = $"Elemental Type #{eid} successfully deleted! I hope you knew what you were doing!";
             return RedirectToAction("AllElementalTypes");
         }
+        #endregion
+
+        #region Attack CRUD
+        #endregion
+
+        #region Admin Related Abyssimal CRUD
         #endregion
 
         #region Type Matchups Editing 
