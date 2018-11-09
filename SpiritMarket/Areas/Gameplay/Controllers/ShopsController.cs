@@ -27,7 +27,7 @@ namespace SpiritMarket.Areas.Gameplay
         public IActionResult AllShops(){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.AllShops = context.Shops.Include(shop => shop.User).
                                 Where(shop => shop.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
@@ -39,7 +39,7 @@ namespace SpiritMarket.Areas.Gameplay
         public IActionResult MyShop(){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.ErrorMessage = TempData["ErrorMessage"];
             ViewBag.MyShop = context.Shops.Include(shop => shop.Items).ThenInclude(listed => listed.Item).
@@ -56,7 +56,7 @@ namespace SpiritMarket.Areas.Gameplay
         public IActionResult CreateShop(Shop shop){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             if(ModelState.IsValid){
                 User CurUser = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
@@ -81,12 +81,12 @@ namespace SpiritMarket.Areas.Gameplay
             //if my id, redirect to shops/me
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.OtherUser = context.GetOneUser(username);
             int OtherUserId = ViewBag.OtherUser.UserId;
             if(ViewBag.OtherUser == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
 
             ViewBag.Shop = context.Shops.Include(shop => shop.Items).ThenInclude(listed => listed.Item).
@@ -106,7 +106,7 @@ namespace SpiritMarket.Areas.Gameplay
             Console.WriteLine("In PurchaseItem");
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ListedItem Item = context.GetOneListedItem(itemid);
             if(Item == null){
@@ -128,7 +128,7 @@ namespace SpiritMarket.Areas.Gameplay
         public IActionResult UpdateStock(IDictionary<int, ListedItem> UpdateProds){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             foreach(KeyValuePair<int, ListedItem> Prod in UpdateProds){
                 ListedItem ExistingItem = context.GetOneListedItem(Prod.Key);
@@ -168,7 +168,7 @@ namespace SpiritMarket.Areas.Gameplay
                 CurUser.SubtractMoney(50);
                 context.SaveChanges();  
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new {area = "Account"});
         }
 
         [HttpGet]
@@ -179,7 +179,7 @@ namespace SpiritMarket.Areas.Gameplay
                 CurUser.Balance += 25;
                 context.SaveChanges();
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new {area = "Account"});
         }
     }
 }

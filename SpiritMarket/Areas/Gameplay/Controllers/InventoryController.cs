@@ -26,7 +26,7 @@ namespace SpiritMarket.Areas.Gameplay
         public IActionResult DisplayInventory(){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.Inventory = context.Users.Include(user => user.Items).ThenInclude(i => i.Item).
                                 SingleOrDefault(user => user.UserId == HttpContext.Session.GetInt32("UserId")).Items;
@@ -63,7 +63,7 @@ namespace SpiritMarket.Areas.Gameplay
         public IActionResult GetStarterKit(){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             User current = ViewBag.User;
             InventoryItem TestLeaf = new InventoryItem();

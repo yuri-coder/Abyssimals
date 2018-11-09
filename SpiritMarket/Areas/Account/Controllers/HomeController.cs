@@ -30,7 +30,7 @@ namespace SpiritMarket.Areas.Account
         public IActionResult Index()
         {
             if(HttpContext.Session.GetInt32("UserId") != null){
-                return RedirectToAction("Home");
+                return RedirectToAction("Home", "Basecamp", new {area = "Gameplay"});
             }
             ViewBag.UsernameError = TempData["UsernameError"];
             ViewBag.PasswordError = TempData["PasswordError"];
@@ -62,7 +62,7 @@ namespace SpiritMarket.Areas.Account
                     {
                         Console.WriteLine("Successfully logged in");
                         HttpContext.Session.SetInt32("UserId", CheckUser.UserId);
-                        return RedirectToAction("Home");
+                        return RedirectToAction("Home", "Basecamp", new {area = "Gameplay"});
                     }
                     else{
                         Console.WriteLine("Incorrect password");
@@ -91,12 +91,9 @@ namespace SpiritMarket.Areas.Account
                 context.Add(user);
                 context.SaveChanges();
                 HttpContext.Session.SetInt32("UserId", user.UserId);
-                return RedirectToAction("Home");
+                return RedirectToAction("Home", "Basecamp", new {area = "Gameplay"});
             }
-            else{
-                Console.WriteLine("Model was invalid!");
-                return View("Index");
-            }
+            return View("Index");
         }
 
         [HttpGet]
@@ -106,23 +103,23 @@ namespace SpiritMarket.Areas.Account
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        [Route("home")]
-        public IActionResult Home(){
-            //links to view/create my shop, list other people's shops
-            if(HttpContext.Session.GetInt32("UserId") == null){
-                return RedirectToAction("Index");
-            }
-            ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
-            // ViewBag.WebRoot = _env.WebRootPath;
-            return View();
-        }
+        // [HttpGet]
+        // [Route("home")]
+        // public IActionResult Home(){
+        //     //links to view/create my shop, list other people's shops
+        //     if(HttpContext.Session.GetInt32("UserId") == null){
+        //         return RedirectToAction("Index");
+        //     }
+        //     ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
+        //     // ViewBag.WebRoot = _env.WebRootPath;
+        //     return View();
+        // }
 
         [Route("{*url}", Order = 999)]
         public IActionResult CatchAll()
         {
             Response.StatusCode = 404;
-            return RedirectToAction("Home");
+            return RedirectToAction("Home", "Basecamp", new {area = "Gameplay"});
         }
     }
 }

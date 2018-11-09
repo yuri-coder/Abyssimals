@@ -35,7 +35,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult AdminHome(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.Success = TempData["AdminMessage"];
             return View();
@@ -47,7 +47,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult NewItem(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.MainItemTypes = context.MainItemTypes.ToList();
             ViewBag.SubItemTypes = context.SubItemTypes.ToList();
@@ -59,7 +59,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult CreateItem(Item p){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             if(ModelState.IsValid){
                 bool StillValid = true;
@@ -104,7 +104,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult ItemList(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
             List<Item> AllItems = context.AllItemsWithTypes();
@@ -126,7 +126,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditItem(int pid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             Item item = context.GetOneItemWithTypes(pid);
             if(item == null){
@@ -146,7 +146,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditItem(Item p, int pid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             Item original = context.GetOneItemWithTypes(pid);
             if(original == null){
@@ -213,7 +213,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult DeleteItem(int pid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             context.DeleteItem(pid);
             context.SaveChanges();
@@ -228,7 +228,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult AllMainItemTypes(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
             ViewBag.AllMainItemTypes = context.MainItemTypes.ToList();
@@ -240,7 +240,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult NewMainItemType(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             return View();
         }
@@ -250,7 +250,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult CreateMainItemType(MainItemType NewType){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             if(ModelState.IsValid){
                 MainItemType existing = context.GetOneMainItemType(NewType.Name);
@@ -271,7 +271,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditMainItemType(int mid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.MainItemType = context.GetOneMainItemType(mid);
             if(ViewBag.MainItemType == null){
@@ -286,7 +286,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditMainItemType(MainItemType ItemType, int mid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             MainItemType original = context.GetOneMainItemType(mid);
             if(original == null){
@@ -315,7 +315,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult DeleteMainItemType(int mid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             context.DeleteMainItemType(mid);
             context.SaveChanges();
@@ -330,7 +330,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult AllSubItemTypes(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
             ViewBag.AllSubItemTypes = context.SubItemTypes.ToList();
@@ -342,7 +342,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult NewSubItemType(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             return View();
         }
@@ -352,7 +352,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult CreateSubItemType(SubItemType NewType){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             if(ModelState.IsValid){
                 SubItemType existing = context.GetOneSubItemType(NewType.Name);
@@ -373,7 +373,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditSubItemType(int mid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.SubItemType = context.GetOneSubItemType(mid);
             if(ViewBag.SubItemType == null){
@@ -388,7 +388,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditSubItemType(SubItemType ItemType, int mid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             SubItemType original = context.GetOneSubItemType(mid);
             if(original == null){
@@ -417,7 +417,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult DeleteSubItemType(int mid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             context.DeleteSubItemType(mid);
             context.SaveChanges();
@@ -432,7 +432,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult AllAbyssimalGroups(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.Success = TempData["SuccessMessage"];
             ViewBag.Error = TempData["ErrorMessage"];
@@ -445,7 +445,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult NewAbyssimalGroup(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             return View();
         }
@@ -455,7 +455,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult CreateAbyssimalGroup(AbyssimalGroup NewGroup){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             if(ModelState.IsValid){
                 AbyssimalGroup existing = context.GetOneAbyssimalGroup(NewGroup.Name);
@@ -476,7 +476,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditAbyssimalGroup(int gid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             return View();
         }
@@ -486,7 +486,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditAbyssimalGroup(AbyssimalGroup group, int gid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             return RedirectToAction("AllAbyssimalGroups");
         }
@@ -496,7 +496,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult DeleteAbyssimalGroup(int gid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             return RedirectToAction("AllAbyssimalGroups");
         }
@@ -513,7 +513,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult AllStatuses(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
             ViewBag.AllStatuses = context.Statuses.ToList();
@@ -525,7 +525,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult NewStatus(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             return View();
         }
@@ -535,7 +535,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult CreateStatus(Status status){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             if(ModelState.IsValid){
                 bool StillValid = true;
@@ -565,7 +565,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditStatus(int sid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.Status = context.GetOneStatus(sid);
             if(ViewBag.Status == null){
@@ -580,7 +580,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditStatus(Status status, int sid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             Status original = context.GetOneStatus(sid);
             if(original == null){
@@ -618,7 +618,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult DeleteStatus(int sid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             context.DeleteStatus(sid);
             context.SaveChanges();
@@ -634,7 +634,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult AllElementalTypes(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.AdminMessage = TempData["AdminMessage"];
             ViewBag.AllElementalTypes = context.ElementalTypes.ToList();
@@ -646,7 +646,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult NewElementalType(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             return View();
         }
@@ -656,7 +656,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult CreateElementalType(ElementalType element){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             if(ModelState.IsValid){
                 bool StillValid = true;
@@ -687,7 +687,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditElementalType(int eid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.ElementalType = context.GetOneElementalType(eid);
             if(ViewBag.ElementalType == null){
@@ -702,7 +702,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditElementalType(ElementalType element, int eid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ElementalType original = context.GetOneElementalType(eid);
             if(original == null){
@@ -740,7 +740,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult DeleteElementalType(int eid){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             context.DeleteElementalType(eid);
             context.SaveChanges();
@@ -761,7 +761,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditTypeChart(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             List<ElementalType> AllElementalTypes = context.AllElementalTypesAndMatchups();
             List<Matchup> AllMatchups = context.AllMatchups();
@@ -781,7 +781,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult EditTypeChart(IDictionary<int, Matchup> Matchups){
             ViewBag.User = context.GetOneUser(HttpContext.Session.GetInt32("UserId"));
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             foreach(KeyValuePair<int, Matchup> matchup in Matchups){
                 Matchup ExistingMatchup = context.GetOneMatchup(matchup.Key);
@@ -806,7 +806,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult NewAdmin(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             ViewBag.Message = TempData["AdminMessage"];
             return View();
@@ -817,7 +817,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult GiveAdmin(string username){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             User user = context.GetOneUser(username);
             if(user != null){
@@ -925,7 +925,7 @@ namespace SpiritMarket.Areas.Admin
         public IActionResult UpdateTypeChart(){
             ViewBag.User = HasAccess();
             if(ViewBag.User == null){
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new {area = "Account"});
             }
             UpdateMatchups();
             return RedirectToAction("AdminHome");

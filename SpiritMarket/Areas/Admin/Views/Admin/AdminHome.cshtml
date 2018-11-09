@@ -1,4 +1,3 @@
-@using SpiritMarket.Models;
 @{
     Layout = "_HomeLayout";
     ViewData["Title"] = "Home";
@@ -15,15 +14,14 @@
         </div>
         <div class="card-body text-center">
             <div class="btn-group-vertical">
-                <a asp-action="NewItem" class="btn btn-success">New Item</a>
+                <a asp-controller="Admin" asp-action="NewItem" class="btn btn-success">New Item</a>
                 <a asp-controller="Admin" asp-action="ItemList" class="btn btn-success">Edit Item</a>
 
-                <a asp-area="Admin" asp-controller="Admin" asp-action="NewMainItemType" class="btn btn-success">New Main Item Type</a>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="AllMainItemTypes" class="btn btn-success">Edit Main Item Type</a>
+                <a asp-controller="Admin" asp-action="NewMainItemType" class="btn btn-success">New Main Item Type</a>
+                <a asp-controller="Admin" asp-action="AllMainItemTypes" class="btn btn-success">Edit Main Item Type</a>
 
-                <a asp-area="Admin" asp-controller="Admin" asp-action="NewSubItemType" class="btn btn-success">New Sub Item Type</a>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="AllSubItemTypes" class="btn btn-success">Edit Sub Item Type</a>
-                <a asp-area="Admin" asp-controller="Test" asp-action="PleaseWork" class="btn btn-success">Testing</a>
+                <a asp-controller="Admin" asp-action="NewSubItemType" class="btn btn-success">New Sub Item Type</a>
+                <a asp-controller="Admin" asp-action="AllSubItemTypes" class="btn btn-success">Edit Sub Item Type</a>
             </div>
         </div>
     </div>
@@ -33,8 +31,8 @@
         </div>
         <div class="card-body text-center">
             <div class="btn-group-vertical">
-                <a asp-area="Admin" asp-controller="Admin" asp-action="NewAbyssimalGroup" class="btn btn-success">New Abyssimal Group</a>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="AllAbyssimalGroups" class="btn btn-success">Edit Abyssimal Group</a>
+                <a asp-controller="Admin" asp-action="NewAbyssimalGroup" class="btn btn-success">New Abyssimal Group</a>
+                <a asp-controller="Admin" asp-action="AllAbyssimalGroups" class="btn btn-success">Edit Abyssimal Group</a>
             </div>
         </div>
     </div>
@@ -44,7 +42,7 @@
         </div>
         <div class="card-body text-center">
             <div class="btn-group-vertical">
-                <a asp-area="Admin" asp-controller="Admin" asp-action="NewAdmin" class="btn btn-success">Give Admin Status</a>
+                <a asp-controller="Admin" asp-action="NewAdmin" class="btn btn-success">Give Admin Status</a>
             </div>
         </div>
     </div>
@@ -54,11 +52,11 @@
         </div>
         <div class="card-body text-center">
             <div class="btn-group-vertical">
-                <a asp-area="Admin" asp-controller="Admin" asp-action="NewElementalType" class="btn btn-success">New Elemental Type</a>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="AllElementalTypes" class="btn btn-success">Edit Elemental Type</a>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="EditTypeChart" class="btn btn-success">Edit Type Chart</a>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="NewStatus" class="btn btn-success">New Status</a>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="AllStatuses" class="btn btn-success">Edit Status</a>
+                <a asp-controller="Admin" asp-action="NewElementalType" class="btn btn-success">New Elemental Type</a>
+                <a asp-controller="Admin" asp-action="AllElementalTypes" class="btn btn-success">Edit Elemental Type</a>
+                <a asp-controller="Admin" asp-action="EditTypeChart" class="btn btn-success">Edit Type Chart</a>
+                <a asp-controller="Admin" asp-action="NewStatus" class="btn btn-success">New Status</a>
+                <a asp-controller="Admin" asp-action="AllStatuses" class="btn btn-success">Edit Status</a>
             </div>
         </div>
     </div>
