@@ -1,0 +1,14 @@
+@using SpiritMarket.Models;
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "New Admin";
+    ViewData["User"] = @ViewBag.User;
+}
+
+<h3>Enter the username of the user to give admin status to.</h3>
+<h5>@ViewBag.Message</h5>
+<h5>@ViewBag.Bleh</h5>
+<form asp-action = "GiveAdmin" asp-controller="Admin" method="post">
+    <input type="text" name="username" placeholder="Username">
+    <input type="submit" value="Give Admin">
+</form>

@@ -1,0 +1,35 @@
+@using SpiritMarket.Models;
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Create Abyssimal Group";
+    ViewData["User"] = @ViewBag.User;
+}
+
+<div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 75%;">
+    <div class="card-header border-success text-center">
+        <b>Add an Abyssimal Group!</b>
+    </div>
+    <div class="card-body text-success">
+        <h5 class="card-title">Please fill out this form to add an Abyssimal Group to the database.</h5>
+        <p class="card-text">All fields are mandatory.
+        </p>
+        @model AbyssimalGroup
+        <form asp-action = "CreateAbyssimalGroup" asp-controller="Admin" method="post">
+            <div class = "form-group row">
+                <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
+                <div class="col-sm-8">
+                    <input asp-for="Name" class="form-control" placeholder="Abyssimal Group Name (45 characters max)">
+                    <small class="form-text text-danger"><span asp-validation-for="Name"></span>@ViewBag.NameError</small>
+                </div>
+                <label asp-for="Description" class="col-sm-4 col-form-label text-center text-muted"></label>
+                <div class="col-sm-8">
+                    <textarea asp-for="Description" class="form-control" placeholder="Abyssimal Group Description (255 characters max)" rows="5"></textarea>
+                    <small class="form-text text-danger"><span asp-validation-for="Description"></span></small>
+                </div>
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-success float-right">Create Abyssimal Group!</button>
+        </form>
+        <a asp-action="AllAbyssimalGroups" asp-controller="Admin"><button class="btn btn-info">Back</button></a>
+    </div>
+</div>

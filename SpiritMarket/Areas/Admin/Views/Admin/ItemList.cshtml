@@ -1,0 +1,46 @@
+@using SpiritMarket.Models;
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "All Items";
+    ViewData["User"] = @ViewBag.User;
+}
+
+<div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 100%;">
+    <div class="card-header border-success text-center">
+        <h4><b>Select an item to edit!</b></h4>
+    </div>
+    <div class="card-body text-success">
+        <h4 class="card-title">Please select an item to edit.</h4>
+        <p class="card-text text-danger">@ViewBag.AdminMessage
+        </p>
+       <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col"><h5>Item ID</h5></th>
+                <th scope="col"><h5>Name</h5></th>
+                <th scope="col"><h5>Main Item Type</h5></th>
+                <th scope="col"><h5>Sub Item Types</h5></th>
+                <th scope="col"><h5>Item Icon</h5></th>
+                <th scope="col"><h5>Actions</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach(Item item in ViewBag.AllItems){
+                        <tr>
+                            <th scope="row" style="vertical-align: middle;"><h5>@item.ItemId</h5></th>
+                            <td style="vertical-align: middle;"><h5>@item.Name</h5></td>
+                            <td style="vertical-align: middle;"><h5>@item.MainItemType.Name</h5></td>
+                            <td style="vertical-align: middle;"><h5>@ViewBag.ItemSubtypes[@item.ItemId]</h5></td>
+                            <td style="vertical-align: middle;"><img src="~/images/@item.Image" class="inventory"></td>
+                            <td style="vertical-align: middle;">
+                                <a asp-controller="Admin" asp-action="EditItem" asp-route-pid=@item.ItemId><button class="btn btn-success"><b>Edit</b></button></a>
+                                <a asp-controller="Admin" asp-action="DeleteItem" asp-route-pid=@item.ItemId><button class="btn btn-danger"><b>Delete</b></button></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

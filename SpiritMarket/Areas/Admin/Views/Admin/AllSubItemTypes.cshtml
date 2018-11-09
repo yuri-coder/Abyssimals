@@ -1,0 +1,42 @@
+@using SpiritMarket.Models;
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "All Sub Item Types";
+    ViewData["User"] = @ViewBag.User;
+}
+
+<div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 100%;">
+    <div class="card-header border-success text-center">
+        <h4><b>Select a Sub Item Type to edit!</b></h4>
+    </div>
+    <div class="card-body text-success">
+        <h4 class="card-title">Please select a sub item type to edit.</h4>
+        <p class="card-text text-danger">@ViewBag.AdminMessage
+        </p>
+       <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col" style="width: 15%;"><h5>Item Type ID</h5></th>
+                <th scope="col"><h5>Name</h5></th>
+                <th scope="col" style="width: 35%;"><h5>Description</h5></th>
+                <th scope="col"><h5>Actions</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach(SubItemType itemType in ViewBag.AllSubItemTypes){
+                        <tr>
+                            <th scope="row" style="vertical-align: middle;"><h5>@itemType.SubItemTypeId</h5></th>
+                            <td style="vertical-align: middle;"><h5>@itemType.Name</h5></td>
+                            <td style="vertical-align: middle;"><p>@itemType.Description</p></td>
+                            <td style="vertical-align: middle;">
+                                <a asp-controller="Admin" asp-action="EditSubItemType" asp-route-mid=@itemType.SubItemTypeId><button class="btn btn-success"><b>Edit</b></button></a>
+                                <a asp-controller="Admin" asp-action="DeleteSubItemType" asp-route-mid=@itemType.SubItemTypeId><button class="btn btn-danger"><b>Delete</b></button></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
