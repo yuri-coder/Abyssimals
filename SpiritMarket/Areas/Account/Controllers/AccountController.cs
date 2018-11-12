@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 
-namespace SpiritMarket.Areas.Gameplay
+namespace SpiritMarket.Areas.Account
 {
-    [Area("Gameplay")]
-    public class GameplayController : Controller
+    [Area("Account")]
+    public class AccountController : Controller
     {
         protected SpiritContext context;
 
-        public GameplayController(SpiritContext c){
+        public AccountController(SpiritContext c){
             context = c;
         }
     }

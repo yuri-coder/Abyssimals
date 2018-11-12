@@ -13,7 +13,7 @@
         <p class="card-text">All fields are mandatory.
         </p>
         @model SubItemType
-        <form asp-action = "CreateSubItemType" asp-controller="Admin" method="post">
+        <form asp-action = "CreateSubItemType" method="post">
             <div class = "form-group row">
                 <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
@@ -29,6 +29,6 @@
             <hr>
             <button type="submit" class="btn btn-success float-right">Create Sub Item Type!</button>
         </form>
-        <a asp-action="AllSubItemTypes" asp-controller="Admin"><button class="btn btn-info">Back</button></a>
+        <a asp-action="AllSubItemTypes"><button class="btn btn-info">Back</button></a>
     </div>
 </div>

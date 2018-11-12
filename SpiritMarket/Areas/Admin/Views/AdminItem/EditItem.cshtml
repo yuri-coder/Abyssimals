@@ -13,7 +13,7 @@
         <p class="card-text">All fields are mandatory.
         </p>
         @model Item
-        <form asp-action = "EditItem" asp-controller="Admin" asp-route-pid=@ViewBag.Item.ItemId method="post"  id="updateitem">
+        <form asp-action = "EditItem" asp-route-pid=@ViewBag.Item.ItemId method="post"  id="updateitem">
             <div class = "form-group row">
                 <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
@@ -90,7 +90,7 @@
                 <button type="submit" class="btn btn-success">Update Item!</button>
             </div>
         </form>
-        <a asp-action="ItemList" asp-controller="Admin"><button class="btn btn-info">Back</button></a>
+        <a asp-action="ItemList"><button class="btn btn-info">Back</button></a>
     </div>
 </div>
 

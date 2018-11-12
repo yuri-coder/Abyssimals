@@ -13,17 +13,10 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace SpiritMarket.Areas.Account
 {
-    [Area("Account")]
     [Route("")]
-    public class HomeController : Controller
+    public class HomeController : AccountController
     {
-        private SpiritContext context;
-        private IHostingEnvironment _env;
-
-        public HomeController(SpiritContext c, IHostingEnvironment env){
-            context = c;
-            _env = env;
-        }
+        public HomeController(SpiritContext c) : base(c) { }
 
         [HttpGet]
         [Route("")]

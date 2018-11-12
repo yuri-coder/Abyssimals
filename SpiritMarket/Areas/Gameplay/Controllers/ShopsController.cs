@@ -11,15 +11,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SpiritMarket.Areas.Gameplay
 {
-    [Area("Gameplay")]
     [Route("shops")]
-    public class ShopsController : Controller
+    public class ShopsController : GameplayController
     {
-        private SpiritContext context;
-
-        public ShopsController(SpiritContext c){
-            context = c;
-        }
+        public ShopsController(SpiritContext c) : base(c) { }
 
         [HttpGet]
         [Route("")]

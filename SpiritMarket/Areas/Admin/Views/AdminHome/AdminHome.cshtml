@@ -1,0 +1,67 @@
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "Home";
+    ViewData["Username"] = @ViewBag.User.Username;
+    ViewData["User"] = @ViewBag.User;
+}
+
+<h1>What would you like to do, @ViewBag.User.Username?</h1>
+<h5 class="text-success">@ViewBag.Success</h5>
+<div class="card-row">
+    <div class="card border-success mb-3 mt-3 ml-auto mr-auto">
+        <div class="card-header border-success text-center">
+            <b>Items</b>
+        </div>
+        <div class="card-body text-center">
+            <div class="btn-group-vertical">
+                <a asp-controller="AdminItem" asp-action="NewItem" class="btn btn-success">New Item</a>
+                <a asp-controller="AdminItem" asp-action="ItemList" class="btn btn-success">Edit Item</a>
+
+                <a asp-controller="AdminItem" asp-action="NewMainItemType" class="btn btn-success">New Main Item Type</a>
+                <a asp-controller="AdminItem" asp-action="AllMainItemTypes" class="btn btn-success">Edit Main Item Type</a>
+
+                <a asp-controller="AdminItem" asp-action="NewSubItemType" class="btn btn-success">New Sub Item Type</a>
+                <a asp-controller="AdminItem" asp-action="AllSubItemTypes" class="btn btn-success">Edit Sub Item Type</a>
+            </div>
+        </div>
+    </div>
+    <div class="card border-success mb-3 mt-3 ml-auto mr-auto">
+        <div class="card-header border-success text-center">
+            <b>Abyssimals</b>
+        </div>
+        <div class="card-body text-center">
+            <div class="btn-group-vertical">
+                <a asp-controller="AdminAbyssimal" asp-action="NewAbyssimalGroup" class="btn btn-success">New Abyssimal Group</a>
+                <a asp-controller="AdminAbyssimal" asp-action="AllAbyssimalGroups" class="btn btn-success">Edit Abyssimal Group</a>
+            </div>
+        </div>
+    </div>
+    <div class="card border-success mb-3 mt-3 ml-auto mr-auto">
+        <div class="card-header border-success text-center">
+            <b>Admins</b>
+        </div>
+        <div class="card-body text-center">
+            <div class="btn-group-vertical">
+                <a asp-controller="AdminUser" asp-action="NewAdmin" class="btn btn-success">Give Admin Status</a>
+            </div>
+        </div>
+    </div>
+    <div class="card border-success mb-3 mt-3 ml-auto mr-auto">
+        <div class="card-header border-success text-center">
+            <b>Combat</b>
+        </div>
+        <div class="card-body text-center">
+            <div class="btn-group-vertical">
+                <a asp-controller="AdminCombat" asp-action="NewElementalType" class="btn btn-success">New Elemental Type</a>
+                <a asp-controller="AdminCombat" asp-action="AllElementalTypes" class="btn btn-success">Edit Elemental Type</a>
+                <a asp-controller="AdminCombat" asp-action="EditTypeChart" class="btn btn-success">Edit Type Chart</a>
+                <a asp-controller="AdminCombat" asp-action="NewStatus" class="btn btn-success">New Status</a>
+                <a asp-controller="AdminCombat" asp-action="AllStatuses" class="btn btn-success">Edit Status</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/adminhome.css" />
+}

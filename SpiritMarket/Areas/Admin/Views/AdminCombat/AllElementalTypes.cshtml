@@ -28,8 +28,8 @@
                             <td style="vertical-align: middle;"><h5>@ElementalType.Name (@ElementalType.ShortName)</h5></td>
                             <td style="vertical-align: middle;"><p>@ElementalType.Description</p></td>
                             <td style="vertical-align: middle;">
-                                <a asp-controller="Admin" asp-action="EditElementalType" asp-route-eid=@ElementalType.ElementalTypeId><button class="btn btn-success"><b>Edit</b></button></a>
-                                <a asp-controller="Admin" asp-action="DeleteElementalType" asp-route-eid=@ElementalType.ElementalTypeId><button class="btn btn-danger"><b>Delete</b></button></a>
+                                <a asp-action="EditElementalType" asp-route-eid=@ElementalType.ElementalTypeId><button class="btn btn-success"><b>Edit</b></button></a>
+                                <a asp-action="DeleteElementalType" asp-route-eid=@ElementalType.ElementalTypeId><button class="btn btn-danger"><b>Delete</b></button></a>
                             </td>
                         </tr>
                     }

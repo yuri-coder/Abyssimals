@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using SpiritMarket.Models;
 using Microsoft.AspNetCore.Http;
@@ -10,15 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 
-namespace SpiritMarket.Areas.Gameplay
+namespace SpiritMarket.Areas.Admin
 {
-    [Area("Gameplay")]
-    public class GameplayController : Controller
+    [Route("admin/abyss")]
+    public class AdminAbyssController : AdminController
     {
-        protected SpiritContext context;
-
-        public GameplayController(SpiritContext c){
-            context = c;
-        }
+        public AdminAbyssController(SpiritContext c) : base(c) { }
     }
 }

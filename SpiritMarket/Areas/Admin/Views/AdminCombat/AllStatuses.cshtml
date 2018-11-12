@@ -29,8 +29,8 @@
                             <td style="vertical-align: middle;"><h5>@status.Name</h5></td>
                             <td style="vertical-align: middle;"><p>@status.Description</p></td>
                             <td style="vertical-align: middle;">
-                                <a asp-controller="Admin" asp-action="EditStatus" asp-route-sid=@status.StatusId><button class="btn btn-success"><b>Edit</b></button></a>
-                                <a asp-controller="Admin" asp-action="DeleteStatus" asp-route-sid=@status.StatusId><button class="btn btn-danger"><b>Delete</b></button></a>
+                                <a asp-action="EditStatus" asp-route-sid=@status.StatusId><button class="btn btn-success"><b>Edit</b></button></a>
+                                <a asp-action="DeleteStatus" asp-route-sid=@status.StatusId><button class="btn btn-danger"><b>Delete</b></button></a>
                             </td>
                         </tr>
                     }
