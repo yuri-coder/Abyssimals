@@ -13,7 +13,7 @@
         <p class="card-text">All fields are mandatory.
         </p>
         @model AbyssimalGroup
-        <form asp-action = "CreateAbyssimalGroup" asp-controller="Admin" method="post">
+        <form asp-action = "CreateAbyssimalGroup" method="post">
             <div class = "form-group row">
                 <label asp-for="Name" class="col-sm-4 col-form-label text-center text-muted"></label>
                 <div class="col-sm-8">
@@ -29,6 +29,6 @@
             <hr>
             <button type="submit" class="btn btn-success float-right">Create Abyssimal Group!</button>
         </form>
-        <a asp-action="AllAbyssimalGroups" asp-controller="Admin"><button class="btn btn-info">Back</button></a>
+        <a asp-action="AllAbyssimalGroups"><button class="btn btn-info">Back</button></a>
     </div>
 </div>

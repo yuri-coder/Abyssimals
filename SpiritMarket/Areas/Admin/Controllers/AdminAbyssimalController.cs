@@ -70,6 +70,11 @@ namespace SpiritMarket.Areas.Admin
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home", new {area = "Account"});
             }
+            ViewBag.AbyssimalGroup = context.GetOneAbyssimalGroup(gid);
+            if(ViewBag.AbyssimalGroup == null){
+                TempData["ErrorMessage"] = $"Abyssimal Group with the requested id {gid} not found!";
+                return RedirectToAction("AllAbyssimalGroups");
+            }
             return View();
         }
 
@@ -80,7 +85,26 @@ namespace SpiritMarket.Areas.Admin
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home", new {area = "Account"});
             }
-            return RedirectToAction("AllAbyssimalGroups");
+            AbyssimalGroup original = context.GetOneAbyssimalGroup(gid);
+            if(original == null){
+                TempData["ErrorMessage"] = $"Abyssimal Group with the requested id {gid} not found!";
+                return RedirectToAction("AllAbyssimalGroups");
+            }
+
+            ViewBag.AbyssimalGroup = original;
+            if(ModelState.IsValid){
+                AbyssimalGroup existing = context.GetOneAbyssimalGroup(group.Name);
+                if(existing != null && existing.AbyssimalGroupId != gid){
+                    ViewBag.NameError = "An Abyssimal Group with that name already exists!";
+                    return View("EditAbyssimalGroup");
+                }
+                original.Name = group.Name;
+                original.Description = group.Description;
+                context.SaveChanges();
+                TempData["SuccessMessage"] = $"Abyssimal Group #{gid} successfully edited!";
+                return RedirectToAction("AllAbyssimalGroups");
+            }
+            return View();
         }
 
         [HttpGet]
@@ -90,6 +114,9 @@ namespace SpiritMarket.Areas.Admin
             if(ViewBag.User == null){
                 return RedirectToAction("Index", "Home", new {area = "Account"});
             }
+            context.DeleteAbyssimalGroup(gid);
+            context.SaveChanges();
+            TempData["SuccessMessage"] = $"Abyssimal Group #{gid} successfully deleted! I hope you knew what you were doing!";
             return RedirectToAction("AllAbyssimalGroups");
         }
         #endregion
