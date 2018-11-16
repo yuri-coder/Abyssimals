@@ -305,6 +305,41 @@ namespace SpiritMarket.Models
         #endregion
     
         #region Attacks
+        public Attack GetOneAttack(int? AttackId){
+            return AttackId == null ? null : this.Attacks.SingleOrDefault(a => a.AttackId == AttackId);
+        }
+
+        public Attack GetOneAttack(string Name){
+            return this.Attacks.SingleOrDefault(a => a.Name.Equals(Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public Attack GetOneAttackFull(int? AttackId){
+            return AttackId == null ? null :
+            this.Attacks.Include(a => a.ElementalRequirements).ThenInclude(aer => aer.ElementalType)
+                        .Include(a => a.AbyssimalGroupRequirements).ThenInclude(agr => agr.AbyssimalGroup)
+                        .Include(a => a.BaseAttackStatuses).ThenInclude(abas => abas.Status)
+                        .Include(a => a.PotentialAbyssimals).ThenInclude(apa => apa.AbyssimalSpecies)
+                        .Include(a => a.AttacksBasedOnThis).ThenInclude(aabot => aabot.Abyssimal)
+                        .Include(a => a.ElementalType)
+                        .SingleOrDefault(a => a.AttackId == AttackId);
+        }
+
+        public List<Attack> GetAllAttacksFull(){
+            return this.Attacks.Include(a => a.ElementalRequirements).ThenInclude(aer => aer.ElementalType)
+                        .Include(a => a.AbyssimalGroupRequirements).ThenInclude(agr => agr.AbyssimalGroup)
+                        .Include(a => a.BaseAttackStatuses).ThenInclude(abas => abas.Status)
+                        .Include(a => a.PotentialAbyssimals).ThenInclude(apa => apa.AbyssimalSpecies)
+                        .Include(a => a.AttacksBasedOnThis).ThenInclude(aabot => aabot.Abyssimal)
+                        .Include(a => a.ElementalType)
+                        .ToList();
+        }
+
+        public void DeleteAttack(int? AttackId){
+            if(AttackId != null){
+                Attack FullAttack = GetOneAttackFull(AttackId);
+                this.Remove(FullAttack);
+            }
+        }
         #endregion
 
         #region Abyssimal Groups

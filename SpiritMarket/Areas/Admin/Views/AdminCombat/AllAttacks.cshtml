@@ -1,0 +1,51 @@
+@{
+    Layout = "_HomeLayout";
+    ViewData["Title"] = "All Attacks";
+    ViewData["User"] = @ViewBag.User;
+}
+
+<div class="card border-success mb-3 mt-3 ml-auto mr-auto" style="max-width: 100%;">
+    <div class="card-header border-success text-center">
+        <h4><b>Select an Attack to edit!</b></h4>
+    </div>
+    <div class="card-body text-success">
+        <h4 class="card-title">Please select an Attack to edit.</h4>
+        <p class="card-text text-success">@ViewBag.SuccessMessage</p>
+        <p class="card-text text-danger">@ViewBag.ErrorMessage</p>
+       <table class="table table-hover">
+            <thead>
+                <tr>
+                <th scope="col"><h5>#</h5></th>
+                <th scope="col"><h5>Name</h5></th>
+                <th scope="col"><h5>Element</h5></th>
+                <th scope="col"><h5>Damage Type</h5></th>
+                <th scope="col"><h5>Power</h5></th>
+                <th scope="col"><h5>Accuracy</h5></th>
+                <th scope="col"><h5>MP</h5></th>
+                <th scope="col"><h5>Max Refine</h5></th>
+                <th scope="col"><h5>Actions</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach(Attack Attack in ViewBag.AllAttacks){
+                        <tr>
+                            <th scope="row" style="vertical-align: middle;"><h5>@Attack.AttackId</h5></th>
+                            <td style="vertical-align: middle;"><h5>@Attack.Name</h5></td>
+                            <td style="vertical-align: middle;"><h5>@Attack.ElementalType.Name</h5></td>
+                            <td style="vertical-align: middle;"><h5>@Attack.GetDamageType()</h5></td>
+                            <td style="vertical-align: middle;"><h5>@Attack.BasePower</h5></td>
+                            <td style="vertical-align: middle;"><h5>@Attack.BaseAccuracy</h5></td>
+                            <td style="vertical-align: middle;"><h5>@Attack.BaseMPCost</h5></td>
+                            <td style="vertical-align: middle;"><h5>@Attack.MaxRefinementLevel</h5></td>
+                            <td style="vertical-align: middle;">
+                                <a asp-action="EditAttack" asp-route-pid=@Attack.AttackId><button class="btn btn-success"><b>Edit</b></button></a>
+                                <a asp-action="DeleteAttack" asp-route-pid=@Attack.AttackId><button class="btn btn-danger"><b>Delete</b></button></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

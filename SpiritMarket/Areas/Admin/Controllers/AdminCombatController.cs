@@ -266,6 +266,78 @@ namespace SpiritMarket.Areas.Admin
         #endregion
 
         #region Attack CRUD
+        [HttpGet]
+        [Route("attacks/edit")]
+        public IActionResult AllAttacks(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home", new {area = "Account"});
+            }
+            ViewBag.AllAttacks = context.GetAllAttacksFull();
+            ViewBag.SuccessMessage = TempData["Success"];
+            ViewBag.ErrorMessage = TempData["Error"];
+            return View();
+        }
+
+        [HttpGet]
+        [Route("attacks/new")]
+        public IActionResult NewAttack(){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home", new {area = "Account"});
+            }
+            ViewBag.SuccessMessage = TempData["Success"];
+            ViewBag.ErrorMessage = TempData["Error"];
+            ViewBag.AllElementalTypes = context.ElementalTypes.ToList();
+            ViewBag.AllStatuses = context.Statuses.ToList();
+            ViewBag.AllAbyssimalGroups = context.AbyssimalGroups.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        [Route("attacks/new")]
+        public IActionResult CreateAttack(Attack attack){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home", new {area = "Account"});
+            }
+            return View();
+        }
+
+        [HttpGet]
+        [Route("attacks/edit/{aid}")]
+        public IActionResult EditAttack(int aid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home", new {area = "Account"});
+            }
+            ViewBag.SuccessMessage = TempData["Success"];
+            ViewBag.ErrorMessage = TempData["Error"];
+            return View();
+        }
+
+        [HttpPost]
+        [Route("attacks/edit/{aid}")]
+        public IActionResult EditAttack(Attack attack, int aid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home", new {area = "Account"});
+            }
+            return View();
+        }
+
+        [HttpGet]
+        [Route("attacks/delete/{aid}")]
+        public IActionResult DeleteAttack(int aid){
+            ViewBag.User = HasAccess();
+            if(ViewBag.User == null){
+                return RedirectToAction("Index", "Home", new {area = "Account"});
+            }
+            context.DeleteAttack(aid);
+            context.SaveChanges();
+            TempData["Success"] = $"Attack #{aid} successfully deleted! I hope you knew what you were doing!";
+            return RedirectToAction("AllAttacks");
+        }
         #endregion
 
         #region Type Matchups Editing 

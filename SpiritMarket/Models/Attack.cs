@@ -27,6 +27,9 @@ namespace SpiritMarket.Models{
         [Required]
         public int MaxRefinementLevel {get; set;}
 
+        [Required]
+        public int DamageType {get; set;}
+
         public List<ElementalRequirement> ElementalRequirements {get; set;}
         public List<AbyssimalGroupRequirement> AbyssimalGroupRequirements {get; set;}
         public List<BaseAttackStatus> BaseAttackStatuses {get; set;}
@@ -52,6 +55,17 @@ namespace SpiritMarket.Models{
             AttacksBasedOnThis = new List<LearnedAttack>();
             Created_At = DateTime.Now;
             Updated_At = DateTime.Now;
+        }
+
+        public string GetDamageType(){
+            switch(DamageType){
+                case 0:
+                    return "Physical";
+                case 1:
+                    return "Magic";
+                default:
+                    return "Other";
+            }
         }
     }
 }
